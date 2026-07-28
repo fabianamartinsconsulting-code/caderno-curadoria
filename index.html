@@ -237,7 +237,10 @@
 
 <div id="modal-root"></div>
 <div class="toast" id="toast"></div>
-
+<script>
+  window.addEventListener('error', e => alert('Erro: ' + e.message));
+  window.addEventListener('unhandledrejection', e => alert('Erro Promise: ' + (e.reason && e.reason.message || e.reason)));
+</script>
 <script type="module" src="js/supabase-config.js"></script>
 <script type="module" src="js/app.js"></script>
 <script>
