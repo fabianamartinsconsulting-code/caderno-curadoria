@@ -1,0 +1,3493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS Representações</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap');
+
+:root {
+  --bg: #0f1117;
+  --surface: #181c27;
+  --surface2: #1f2436;
+  --surface3: #252b40;
+  --border: #2a3050;
+  --accent: #3b7fff;
+  --accent2: #00c9a7;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --text: #e8ecf4;
+  --text2: #8b94b0;
+  --text3: #4f5a78;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:220px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 0;height:100vh;overflow-y:auto;}
+.logo{padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.logo-mark{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-0.5px;}
+.logo-sub{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-top:2px;}
+.nav-group{padding:0 12px;margin-bottom:4px;}
+.nav-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);padding:0 8px;margin-bottom:4px;margin-top:16px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:inherit;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(59,127,255,0.12);color:var(--accent);}
+.nav-icon{font-size:15px;width:20px;text-align:center;}
+.badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:99px;}
+.badge.warn{background:var(--warn);color:#000;}
+.badge.green{background:var(--accent2);color:#000;}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.page-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:600;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:12.5px;color:var(--text3);min-width:200px;cursor:text;}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+
+/* CONTENT AREA */
+.content{flex:1;overflow-y:auto;padding:24px;}
+
+/* SCREEN */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:13px;font-weight:600;}
+.card-body{padding:16px 18px;}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi.blue::before{background:var(--accent);}
+.kpi.green::before{background:var(--accent2);}
+.kpi.warn::before{background:var(--warn);}
+.kpi.red::before{background:var(--danger);}
+.kpi-label{font-size:11px;color:var(--text2);margin-bottom:6px;}
+.kpi-value{font-family:'Sora',sans-serif;font-size:26px;font-weight:700;margin-bottom:3px;}
+.kpi-delta{font-size:11px;color:var(--accent2);}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px;}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.tbl th{text-align:left;color:var(--text3);font-size:10.5px;text-transform:uppercase;letter-spacing:1px;padding:0 0 10px;font-weight:500;border-bottom:1px solid var(--border);}
+.tbl td{padding:10px 0;border-bottom:1px solid rgba(42,48,80,0.5);color:var(--text2);}
+.tbl td:first-child{color:var(--text);font-weight:500;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,0.01);}
+
+/* STATUS */
+.status{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:99px;font-weight:500;}
+.status.ativo{background:rgba(0,201,167,0.1);color:var(--accent2);}
+.status.pendente{background:rgba(245,158,11,0.1);color:var(--warn);}
+.status.inativo{background:rgba(239,68,68,0.1);color:var(--danger);}
+.status.novo{background:rgba(59,127,255,0.1);color:var(--accent);}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;font-family:inherit;transition:all 0.15s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#2563eb;}
+.btn-outline{background:transparent;color:var(--text2);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:rgba(239,68,68,0.1);color:var(--danger);border:1px solid rgba(239,68,68,0.2);}
+.btn-sm{padding:4px 10px;font-size:11.5px;}
+.card-action{font-size:12px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:inherit;}
+
+/* PROGRESS */
+.prog-item{margin-bottom:12px;}
+.prog-label{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px;color:var(--text2);}
+.prog-label span:last-child{color:var(--text);font-weight:500;}
+.prog-track{height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;}
+.fill-blue{background:var(--accent);}
+.fill-green{background:var(--accent2);}
+.fill-warn{background:var(--warn);}
+.fill-red{background:var(--danger);}
+
+/* PARTNER ITEM */
+.partner-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(42,48,80,0.5);}
+.partner-row:last-child{border-bottom:none;}
+.p-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.p-name{font-size:13px;font-weight:600;}
+.p-seg{font-size:11px;color:var(--text3);margin-top:1px;}
+.p-actions{margin-left:auto;display:flex;gap:6px;}
+
+/* ACTIVITY */
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(42,48,80,0.4);align-items:flex-start;}
+.act-item:last-child{border-bottom:none;}
+.act-dot{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.act-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.act-text strong{color:var(--text);}
+.act-time{font-size:10.5px;color:var(--text3);margin-top:1px;}
+
+/* FORM */
+.form-group{margin-bottom:16px;}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;font-weight:500;}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border 0.15s;}
+.form-input:focus{border-color:var(--accent);}
+.form-select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;cursor:pointer;appearance:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+textarea.form-input{resize:vertical;min-height:80px;}
+
+/* MODAL */
+.leaflet-container{z-index:1;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:90%;max-width:560px;max-height:90vh;overflow-y:auto;}
+.modal-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Sora',sans-serif;font-size:15px;font-weight:600;}
+.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;line-height:1;}
+.modal-body{padding:22px;}
+.modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--accent2);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);z-index:200;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all 0.3s;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{font-size:16px;}
+
+/* TAG */
+.tag{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;background:var(--surface2);color:var(--text3);margin:2px;}
+
+/* COM ROW */
+.com-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(42,48,80,0.4);}
+.com-row:last-child{border-bottom:none;}
+.com-val{font-weight:600;color:var(--accent2);font-family:'Sora',sans-serif;font-size:14px;}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px 20px;color:var(--text3);}
+.empty-icon{font-size:36px;margin-bottom:12px;}
+.empty-text{font-size:13px;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.sec-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:600;}
+.sec-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+
+/* TABS */
+.tabs{display:flex;gap:2px;margin-bottom:18px;border-bottom:1px solid var(--border);}
+.tab{padding:8px 14px;font-size:12.5px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all 0.15s;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab:hover:not(.active){color:var(--text2);}
+
+/* ORCAMENTO CARD */
+.orc-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:border 0.15s;}
+.orc-card:hover{border-color:var(--accent);}
+.orc-num{font-family:'Sora',sans-serif;font-size:11px;color:var(--text3);font-weight:600;width:40px;}
+.orc-info{flex:1;}
+.orc-client{font-size:13px;font-weight:600;color:var(--text);}
+.orc-detail{font-size:11px;color:var(--text3);margin-top:1px;}
+.orc-val{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-right:12px;}
+
+/* SEARCH INPUT */
+.search-input-wrap{position:relative;margin-bottom:16px;}
+.search-input-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px 8px 34px;font-size:13px;color:var(--text);font-family:inherit;outline:none;}
+.search-input-wrap input:focus{border-color:var(--accent);}
+.search-input-wrap::before{content:'🔍';position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;}
+
+/* CHART BARS */
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:60px;margin-top:10px;}
+.cbar{flex:1;border-radius:3px 3px 0 0;background:var(--accent);opacity:0.5;cursor:pointer;transition:opacity 0.15s;position:relative;}
+.cbar:hover{opacity:1;}
+.cbar.highlight{opacity:0.85;background:var(--accent2);}
+
+/* PILL */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:none;font-family:inherit;transition:all 0.15s;}
+.pill.active{background:rgba(59,127,255,0.1);border-color:var(--accent);color:var(--accent);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px;}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+
+<!-- TELA DE LOGIN -->
+<div id="login-screen" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;">
+  <div style="width:100%;max-width:380px;padding:20px;">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-family:Sora,sans-serif;font-size:32px;font-weight:700;color:var(--accent)">MS</div>
+      <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:2px;margin-top:4px;">Representações</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;">
+      <div style="font-family:Sora,sans-serif;font-size:16px;font-weight:600;margin-bottom:20px;">Entrar no sistema</div>
+      <div id="login-error" style="display:none;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--danger);margin-bottom:14px;">Usuário ou senha incorretos.</div>
+      <div class="form-group"><label class="form-label">Usuário</label><input class="form-input" id="login-user" placeholder="seu.usuario" autocomplete="username"></div>
+      <div class="form-group"><label class="form-label">Senha</label><input class="form-input" id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;" onclick="doLogin()">Entrar</button>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--text3)">MS Representações © 2026</div>
+  </div>
+</div>
+
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">MS</div>
+    <div class="logo-sub">Representações</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Painel Executivo</div>
+    <button class="nav-item active" onclick="goTo('dashboard',this)">
+      <span class="nav-icon">📊</span> Dashboard
+    </button>
+    <button class="nav-item" id="nav-painel-gestora" onclick="goTo('painel-gestora',this)" style="display:none">
+      <span class="nav-icon">🧭</span> Painel da Gestora
+    </button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Mapeamento de Oportunidades</div>
+    <button class="nav-item" onclick="goTo('mapeamento',this)">
+      <span class="nav-icon">🗺️</span> Mapeamento
+      <span class="badge green" id="badge-mapeamento">0</span>
+    </button>
+    <button class="nav-item" onclick="goTo('prospeccao',this)">
+      <span class="nav-icon">🎯</span> Prospecção
+      <span class="badge green" id="badge-prosp">0</span>
+    </button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Gestão Comercial</div>
+    <button class="nav-item" onclick="goTo('crm',this)">
+      <span class="nav-icon">👥</span> CRM Clientes
+      <span class="badge warn" id="badge-crm">3</span>
+    </button>
+    <button class="nav-item" onclick="goTo('parceiros',this)">
+      <span class="nav-icon">🤝</span> Parceiros
+      <span class="badge" id="badge-parceiros">8</span>
+    </button>
+    <button class="nav-item" onclick="goTo('catalogo',this)">
+      <span class="nav-icon">📦</span> Catálogo
+    </button>
+    <button class="nav-item" onclick="goTo('orcamentos',this)">
+      <span class="nav-icon">📋</span> Orçamentos
+      <span class="badge warn" id="badge-orc">12</span>
+    </button>
+    <button class="nav-item" onclick="goTo('pedidos',this)">
+      <span class="nav-icon">🧾</span> Pedidos
+      <span class="badge warn" id="badge-pedidos">0</span>
+    </button>
+    <button class="nav-item" onclick="goTo('comissoes',this)">
+      <span class="nav-icon">💰</span> Comissões
+    </button>
+    <button class="nav-item" onclick="goTo('metas',this)">
+      <span class="nav-icon">📈</span> Metas
+    </button>
+    <button class="nav-item" onclick="goTo('rotas',this)">
+      <span class="nav-icon">🗺️</span> Rotas — Edgar
+    </button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Inteligência Comercial</div>
+    <button class="nav-item" onclick="goTo('relatorios',this)">
+      <span class="nav-icon">📑</span> Relatórios
+    </button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Operações</div>
+    <button class="nav-item" onclick="goTo('apresentacoes',this)">
+      <span class="nav-icon">📁</span> Apresentações
+    </button>
+    <button class="nav-item" id="nav-usuarios" onclick="goTo('usuarios',this)">
+      <span class="nav-icon">🔐</span> Usuários
+    </button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="page-title" id="page-title">Dashboard</div>
+    <div class="topbar-right">
+      <div class="search-wrap" onclick="focusSearch()">🔍 &nbsp;Buscar...</div>
+      <button class="btn btn-primary" id="topbar-btn" onclick="topbarAction()">+ Novo Orçamento</button>
+      <div style="font-size:11px;color:var(--text3)" id="topbar-perfil"></div><div class="avatar" id="topbar-avatar" style="cursor:pointer" onclick="openModal('modal-perfil-info')">MS</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="screen active" id="screen-dashboard">
+      <div class="tabs">
+        <button class="tab active">Visão Geral</button>
+        <button class="tab">Este mês</button>
+        <button class="tab">Por Parceiro</button>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-label">Clientes ativos</div><div class="kpi-value" id="kpi-clientes-ativos">0</div><div class="kpi-delta">Total cadastrado</div></div>
+        <div class="kpi green"><div class="kpi-label">Faturamento (junho)</div><div class="kpi-value">R$84k</div><div class="kpi-delta">↑ +18% vs maio</div></div>
+        <div class="kpi warn"><div class="kpi-label">Orçamentos em aberto</div><div class="kpi-value" id="kpi-orc-abertos">0</div><div class="kpi-delta" id="kpi-orc-aguardam">0 aguardam resposta</div></div>
+        <div class="kpi red"><div class="kpi-label">Comissões a pagar</div><div class="kpi-value">R$6,2k</div><div class="kpi-delta" style="color:var(--warn)">↗ Fecha em 5 dias</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Funil Comercial</span></div>
+        <div class="card-body">
+          <div class="kpi-grid" id="funil-kpi-grid">
+            <div class="kpi blue"><div class="kpi-label">Oportunidades abertas</div><div class="kpi-value" id="kpi-oport-abertas">0</div><div class="kpi-delta">Não fechadas nem perdidas</div></div>
+            <div class="kpi green"><div class="kpi-label">Taxa de conversão</div><div class="kpi-value" id="kpi-taxa-conversao">0%</div><div class="kpi-delta">Fechados / (Fechados + Perdidos)</div></div>
+            <div class="kpi warn"><div class="kpi-label">Tempo médio de fechamento</div><div class="kpi-value" id="kpi-tempo-fechamento">—</div><div class="kpi-delta">Dias, entre cadastro e fechamento</div></div>
+            <div class="kpi red"><div class="kpi-label">Valor potencial em aberto</div><div class="kpi-value" id="kpi-valor-potencial">R$ 0</div><div class="kpi-delta" id="kpi-valor-convertido">Convertido: R$ 0</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:16px;" id="funil-etapas-grid"></div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Ranking por responsável</span></div>
+          <div class="card-body" id="ranking-responsavel"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Oportunidades sem movimentação (+7 dias)</span></div>
+          <div class="card-body" id="oport-paradas"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Clientes recentes</span><button class="card-action" onclick="goTo('crm',document.querySelector('.nav-item[onclick*=crm]'))">Ver CRM →</button></div>
+        <div class="card-body">
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>Responsável</th><th>Etapa</th><th></th></tr></thead>
+            <tbody id="dash-clientes-recentes"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Comissões — junho</span></div>
+            <div class="card-body">
+              <div class="com-row"><div><div style="font-size:13px;font-weight:600">Edgar</div><div style="font-size:11px;color:var(--text3)">12 vendas</div></div><div class="com-val">R$ 3.100</div></div>
+              <div class="com-row"><div><div style="font-size:13px;font-weight:600">Nelma</div><div style="font-size:11px;color:var(--text3)">Back-office</div></div><div class="com-val">R$ 1.200</div></div>
+              <div class="com-row"><div><div style="font-size:13px;font-weight:600">Fort Atacadista</div><div style="font-size:11px;color:var(--text3)">Indicações</div></div><div class="com-val">R$ 1.900</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Atividade recente</span></div>
+            <div class="card-body">
+              <div class="act-item"><div class="act-dot" style="background:var(--accent2)"></div><div><div class="act-text"><strong>Edgar</strong> fechou — Construtora Delta</div><div class="act-time">Hoje, 14:32</div></div></div>
+              <div class="act-item"><div class="act-dot" style="background:var(--accent)"></div><div><div class="act-text"><strong>Nelma</strong> atualizou catálogo N&E Inox</div><div class="act-time">Hoje, 11:05</div></div></div>
+              <div class="act-item"><div class="act-dot" style="background:var(--warn)"></div><div><div class="act-text">Orçamento <strong>#041</strong> enviado ao Hotel Serra Verde</div><div class="act-time">Ontem, 17:20</div></div></div>
+              <div class="act-item"><div class="act-dot" style="background:var(--accent2)"></div><div><div class="act-text"><strong>Fort Atacadista</strong> adicionado ao portfólio</div><div class="act-time">25/06, 09:14</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Catálogos digitais — status</span><button class="card-action" onclick="goTo('catalogo',document.querySelector('[onclick*=catalogo]'))">Gerenciar →</button></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+            <div class="prog-item"><div class="prog-label"><span>N&E Inox</span><span>100%</span></div><div class="prog-track"><div class="prog-fill fill-green" style="width:100%"></div></div></div>
+            <div class="prog-item"><div class="prog-label"><span>Decorativo Casa</span><span>75%</span></div><div class="prog-track"><div class="prog-fill fill-blue" style="width:75%"></div></div></div>
+            <div class="prog-item"><div class="prog-label"><span>Fort Atacadista</span><span>60%</span></div><div class="prog-track"><div class="prog-fill fill-blue" style="width:60%"></div></div></div>
+            <div class="prog-item"><div class="prog-label"><span>Linha Industrial</span><span>30%</span></div><div class="prog-track"><div class="prog-fill fill-warn" style="width:30%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PAINEL DA GESTORA ===== -->
+    <div class="screen" id="screen-painel-gestora">
+      <div class="sec-header">
+        <div><div class="sec-title">Painel da Gestora</div><div class="sec-sub">Prioridades do dia — visão consolidada de toda a operação</div></div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-label">Novos hoje</div><div class="kpi-value" id="pg-novos-hoje">0</div><div class="kpi-delta">Clientes + oportunidades</div></div>
+        <div class="kpi green"><div class="kpi-label">Atualizados hoje</div><div class="kpi-value" id="pg-atualizados-hoje">0</div><div class="kpi-delta">Negociações movimentadas</div></div>
+        <div class="kpi warn"><div class="kpi-label">Parados +7 dias</div><div class="kpi-value" id="pg-parados">0</div><div class="kpi-delta">Sem atualização recente</div></div>
+        <div class="kpi red"><div class="kpi-label">Ações em atraso</div><div class="kpi-value" id="pg-atrasadas">0</div><div class="kpi-delta">Próxima ação vencida</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📌 Ações previstas para hoje</span></div>
+          <div class="card-body" id="pg-acoes-hoje"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">⚠️ Ações em atraso</span></div>
+          <div class="card-body" id="pg-acoes-atraso"></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><span class="card-title">🆕 Novos hoje</span></div>
+          <div class="card-body" id="pg-lista-novos"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">🐌 Parados há mais de 7 dias</span></div>
+          <div class="card-body" id="pg-lista-parados"></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header"><span class="card-title">✅ Fechados hoje</span></div>
+          <div class="card-body" id="pg-lista-fechados"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">❌ Perdidos hoje</span></div>
+          <div class="card-body" id="pg-lista-perdidos"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PARCEIROS ===== -->
+    <div class="screen" id="screen-parceiros">
+      <div class="sec-header">
+        <div><div class="sec-title">Parceiros / Fornecedores</div><div class="sec-sub">Gerencie todos os fornecedores e seus catálogos</div></div>
+        <button class="btn btn-primary" onclick="abrirNovoParceiro()">+ Novo Parceiro</button>
+      </div>
+      <div class="search-input-wrap"><input type="text" placeholder="Buscar parceiro ou segmento..." oninput="filterParceiros(this.value)"></div>
+      <div id="parceiros-list">
+        <div class="card">
+          <div class="card-body" style="padding:0 18px;" id="parceiros-list-body"></div>
+        </div>
+      </div>
+      <div id="parceiros-empty" class="empty" style="display:none">
+        <div class="empty-icon">🤝</div>
+        <div class="empty-text">Nenhum parceiro cadastrado ainda.<br>Clique em <strong>+ Novo Parceiro</strong> para começar.</div>
+      </div>
+    </div>
+      </div>
+    </div>
+
+    <!-- ===== CATÁLOGO ===== -->
+    <div class="screen" id="screen-catalogo">
+      <div class="sec-header">
+        <div><div class="sec-title">Catálogo de Produtos</div><div class="sec-sub">Portfólio completo de todos os parceiros</div></div>
+        <button class="btn btn-primary" onclick="openModal('modal-produto')">+ Adicionar Produto</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="pill active" onclick="filterCat('todos',this)">Todos</button>
+        <button class="pill" onclick="filterCat('cozinhas',this)">🍳 Cozinhas</button>
+        <button class="pill" onclick="filterCat('decoracao',this)">🏡 Decoração</button>
+        <button class="pill" onclick="filterCat('industrial',this)">🔧 Industrial</button>
+        <button class="pill" onclick="filterCat('atacado',this)">📦 Atacado</button>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0 18px;">
+          <table class="tbl" id="cat-table">
+            <thead><tr><th>Produto</th><th>Parceiro</th><th>Categoria</th><th>Preço</th><th>Status</th><th></th></tr></thead>
+            <tbody id="cat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="cat-empty" class="empty" style="display:none">
+        <div class="empty-icon">📦</div>
+        <div class="empty-text">Nenhum produto cadastrado ainda.<br>Clique em <strong>+ Adicionar Produto</strong> para começar.</div>
+      </div>
+    </div>
+
+    <!-- ===== CRM ===== -->
+    <div class="screen" id="screen-crm">
+      <div class="sec-header">
+        <div><div class="sec-title">CRM — Clientes</div><div class="sec-sub">Acompanhe todas as negociações em andamento</div></div>
+        <button class="btn btn-primary" onclick="abrirNovoCliente()">+ Novo Cliente</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;">
+        <button class="pill active" onclick="setCrmFilter('todos',this)">Todos (<span id="crm-count-todos">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('novo_contato',this)">Novo Contato (<span id="crm-count-novo_contato">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('qualificado',this)">Qualificado (<span id="crm-count-qualificado">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('em_negociacao',this)">Em Negociação (<span id="crm-count-em_negociacao">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('proposta_enviada',this)">Proposta Enviada (<span id="crm-count-proposta_enviada">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('aguardando_retorno',this)">Aguardando Retorno (<span id="crm-count-aguardando_retorno">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('fechado',this)">Fechados (<span id="crm-count-fechado">0</span>)</button>
+        <button class="pill" onclick="setCrmFilter('perdido',this)">Perdidos (<span id="crm-count-perdido">0</span>)</button>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0 18px;">
+          <table class="tbl">
+            <thead><tr><th>Cliente</th><th>Contato</th><th>Segmento</th><th>Vendedor</th><th>Último contato</th><th>Status</th><th></th></tr></thead>
+            <tbody id="crm-tbody"></tbody>
+          </table>
+          <div class="empty" id="crm-empty" style="display:none">
+            <div class="empty-icon">👥</div>
+            <div class="empty-text">Nenhum cliente cadastrado ainda.<br>Clique em <strong>+ Novo Cliente</strong> para começar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ORÇAMENTOS ===== -->
+    <div class="screen" id="screen-orcamentos">
+      <div class="sec-header">
+        <div><div class="sec-title">Orçamentos</div><div class="sec-sub" id="orc-sub">0 em aberto</div></div>
+        <button class="btn btn-primary" onclick="abrirNovoOrcamento()">+ Novo Orçamento</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="pill active" onclick="setOrcFilter('aberto',this)">Em aberto (<span id="orc-count-aberto">0</span>)</button>
+        <button class="pill" onclick="setOrcFilter('aprovado',this)">Aprovados (<span id="orc-count-aprovado">0</span>)</button>
+        <button class="pill" onclick="setOrcFilter('recusado',this)">Recusados (<span id="orc-count-recusado">0</span>)</button>
+        <button class="pill" onclick="setOrcFilter('todos',this)">Todos</button>
+      </div>
+      <div id="orc-list"></div>
+      <div class="empty" id="orc-empty" style="display:none">
+        <div class="empty-icon">📋</div>
+        <div class="empty-text">Nenhum orçamento cadastrado ainda.<br>Clique em <strong>+ Novo Orçamento</strong> para começar.</div>
+      </div>
+    </div>
+
+    <!-- ===== PEDIDOS ===== -->
+    <div class="screen" id="screen-pedidos">
+      <div class="sec-header">
+        <div><div class="sec-title">Pedidos</div><div class="sec-sub">Pedidos gerados a partir de orçamentos aprovados</div></div>
+        <button class="btn btn-primary" onclick="abrirNovoPedido()">+ Novo Pedido</button>
+      </div>
+      <div id="pedidos-lista"></div>
+      <div id="pedidos-empty" class="empty">
+        <div class="empty-icon">🧾</div>
+        <div class="empty-text">Nenhum pedido cadastrado ainda.<br>Gere um a partir de um orçamento ou clique em <strong>+ Novo Pedido</strong>.</div>
+      </div>
+    </div>
+
+    <!-- ===== COMISSÕES ===== -->
+    <div class="screen" id="screen-comissoes">
+      <div class="sec-header">
+        <div><div class="sec-title">Comissões</div><div class="sec-sub" id="com-sub">Controle de pagamentos por período</div></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-outline" onclick="exportarComissoesCSV()">↓ Exportar Excel</button>
+          <button class="btn btn-primary" onclick="abrirNovaComissao()">+ Nova Comissão</button>
+        </div>
+      </div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="kpi green"><div class="kpi-label">Total a pagar — mês atual</div><div class="kpi-value" id="kpi-com-apagar">R$0</div><div class="kpi-delta" id="kpi-com-apagar-count">0 pendentes</div></div>
+        <div class="kpi blue"><div class="kpi-label">Pago no mês</div><div class="kpi-value" id="kpi-com-pago">R$0</div><div class="kpi-delta" id="kpi-com-pago-count">0 pessoas</div></div>
+        <div class="kpi warn"><div class="kpi-label">Acumulado <span id="kpi-com-ano-label"></span></div><div class="kpi-value" id="kpi-com-ano">R$0</div><div class="kpi-delta" id="kpi-com-ano-delta"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title" id="com-tabela-titulo">Por pessoa — mês atual</span></div>
+          <div class="card-body" style="padding:0 18px;">
+            <table class="tbl">
+              <thead><tr><th>Pessoa</th><th>Vendas</th><th>Volume</th><th>% Comissão</th><th>Valor</th><th>Status</th><th></th></tr></thead>
+              <tbody id="com-tbody"></tbody>
+            </table>
+            <div class="empty" id="com-empty" style="display:none">
+              <div class="empty-icon">💰</div>
+              <div class="empty-text">Nenhuma comissão lançada ainda.<br>Clique em <strong>+ Nova Comissão</strong> para começar.</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Histórico mensal — total da equipe</span></div>
+          <div class="card-body">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px;" id="com-chart-labels"></div>
+            <div class="chart-bars" id="com-chart-bars"></div>
+            <div style="margin-top:12px;display:flex;justify-content:space-between;font-size:11px;color:var(--text3);" id="com-chart-resumo"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== METAS ===== -->
+    <div class="screen" id="screen-metas">
+      <div class="sec-header">
+        <div><div class="sec-title">Metas — <span id="mt-ano-titulo"></span></div><div class="sec-sub">Acompanhe o progresso das metas da equipe</div></div>
+        <button class="btn btn-primary" onclick="abrirNovaMeta()">+ Nova Meta</button>
+      </div>
+      <div id="mt-destaque"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Metas por área</span></div>
+          <div class="card-body" id="mt-lista-area"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Metas por parceiro</span></div>
+          <div class="card-body" id="mt-lista-parceiro"></div>
+        </div>
+      </div>
+      <div class="empty" id="mt-empty" style="display:none">
+        <div class="empty-icon">📈</div>
+        <div class="empty-text">Nenhuma meta cadastrada ainda.<br>Clique em <strong>+ Nova Meta</strong> para começar.</div>
+      </div>
+    </div>
+
+    <!-- ===== ROTAS ===== -->
+    <div class="screen" id="screen-rotas">
+      <div class="sec-header">
+        <div><div class="sec-title">Rotas — Edgar</div><div class="sec-sub">Planejamento de visitas e cobertura de campo</div></div>
+        <button class="btn btn-primary" onclick="abrirNovaVisita()">+ Agendar Visita</button>
+      </div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="kpi blue"><div class="kpi-label">Visitas esta semana</div><div class="kpi-value" id="kpi-vi-semana">0</div><div class="kpi-delta" id="kpi-vi-realizadas">0 realizadas</div></div>
+        <div class="kpi green"><div class="kpi-label">Taxa de conversão</div><div class="kpi-value" id="kpi-vi-conversao">0%</div><div class="kpi-delta">Realizadas ÷ agendadas</div></div>
+        <div class="kpi warn"><div class="kpi-label">Km rodados</div><div class="kpi-value" id="kpi-vi-km">0</div><div class="kpi-delta" id="kpi-vi-cidades">0 cidades</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Agenda — Edgar</span></div>
+        <div class="card-body" style="padding:0 18px;">
+          <table class="tbl">
+            <thead><tr><th>Data</th><th>Cliente</th><th>Cidade</th><th>Objetivo</th><th>Parceiro</th><th>Status</th><th></th></tr></thead>
+            <tbody id="vi-tbody"></tbody>
+          </table>
+          <div class="empty" id="vi-empty" style="display:none">
+            <div class="empty-icon">🗺️</div>
+            <div class="empty-text">Nenhuma visita agendada ainda.<br>Clique em <strong>+ Agendar Visita</strong> para começar.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== APRESENTAÇÕES ===== -->
+    <div class="screen" id="screen-apresentacoes">
+      <div class="sec-header">
+        <div><div class="sec-title">Apresentações</div><div class="sec-sub">PDFs do Google Drive — clique para abrir ou copiar o link</div></div>
+        <button class="btn btn-primary" onclick="openModal('modal-apresentacao')">+ Nova Apresentação</button>
+      </div>
+      <div style="background:rgba(59,127,255,0.06);border:1px solid rgba(59,127,255,0.2);border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:10px;">
+        <span style="font-size:18px">💡</span>
+        <span>Cole o link de compartilhamento do PDF no Google Drive. O arquivo fica salvo aqui e pode ser aberto a qualquer momento.</span>
+      </div>
+      <div id="apres-grid" class="grid-2"></div>
+      <div id="apres-empty" class="empty">
+        <div class="empty-icon">📁</div>
+        <div class="empty-text">Nenhuma apresentação cadastrada ainda.<br>Clique em <strong>+ Nova Apresentação</strong> para começar.</div>
+      </div>
+    </div>
+
+    <!-- ===== RELATÓRIOS ===== -->
+    <div class="screen" id="screen-relatorios">
+      <div class="sec-header">
+        <div><div class="sec-title">Relatórios</div><div class="sec-sub">Resumos periódicos para tomada de decisão — gerado a partir dos dados reais do sistema</div></div>
+        <button class="btn btn-outline" onclick="window.print()">↓ Gerar PDF</button>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-header"><span class="card-title">Vendas por parceiro — pedidos faturados</span></div><div class="card-body">
+          <table class="tbl">
+            <thead><tr><th>Parceiro</th><th>Vendas</th><th>Volume</th><th>Share</th></tr></thead>
+            <tbody id="rel-parceiro-tbody"></tbody>
+          </table>
+          <div class="empty" id="rel-parceiro-empty" style="display:none"><div class="empty-text">Sem pedidos suficientes para gerar este relatório ainda.</div></div>
+        </div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Faturamento — últimos 6 meses (pedidos)</span></div><div class="card-body">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px;" id="rel-fat-labels"></div>
+          <div class="chart-bars" id="rel-fat-bars"></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:8px;" id="rel-fat-valores"></div>
+        </div></div>
+      </div>
+    </div>
+
+
+    <!-- ===== USUÁRIOS ===== -->
+    <div class="screen" id="screen-usuarios">
+      <div class="sec-header">
+        <div><div class="sec-title">Usuários</div><div class="sec-sub">Gerencie quem acessa o sistema e seus perfis</div></div>
+        <button class="btn btn-primary" onclick="openModal('modal-usuario')">+ Novo Usuário</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+        <div style="background:rgba(59,127,255,0.08);border:1px solid rgba(59,127,255,0.2);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--text2);">
+          <span style="color:var(--accent);font-weight:600">Admin</span> — acesso total ao sistema
+        </div>
+        <div style="background:rgba(0,201,167,0.08);border:1px solid rgba(0,201,167,0.2);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--text2);">
+          <span style="color:var(--accent2);font-weight:600">Vendedor</span> — CRM, Orçamentos, Rotas
+        </div>
+        <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--text2);">
+          <span style="color:var(--warn);font-weight:600">Back-office</span> — Catálogo, Comissões, Relatórios
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding:0 18px;">
+          <table class="tbl">
+            <thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Status</th><th></th></tr></thead>
+            <tbody id="usuarios-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PROSPECÇÃO ===== -->
+    <!-- ===== MAPEAMENTO DE OPORTUNIDADES ===== -->
+    <div class="screen" id="screen-mapeamento">
+      <div class="sec-header">
+        <div><div class="sec-title">Mapeamento de Oportunidades</div><div class="sec-sub">Identificação de oportunidades — antes de existir negociação comercial</div></div>
+        <button class="btn btn-primary" onclick="abrirNovoMapeamento()">+ Nova Oportunidade Mapeada</button>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-header"><span class="card-title">Mapa das oportunidades</span></div>
+        <div class="card-body" style="padding:0;">
+          <div id="mapa-oportunidades" style="height:340px;width:100%;border-radius:0 0 12px 12px;position:relative;z-index:1;"></div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-label">Identificadas</div><div class="kpi-value" id="map-kpi-identificadas">0</div></div>
+        <div class="kpi green"><div class="kpi-label">Qualificadas</div><div class="kpi-value" id="map-kpi-qualificadas">0</div></div>
+        <div class="kpi warn"><div class="kpi-label">Descartadas</div><div class="kpi-value" id="map-kpi-descartadas">0</div></div>
+        <div class="kpi red"><div class="kpi-label">Convertidas em CRM</div><div class="kpi-value" id="map-kpi-convertidas">0</div></div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi blue"><div class="kpi-label">Potencial financeiro total</div><div class="kpi-value" id="map-kpi-potencial">R$ 0</div></div>
+        <div class="kpi green"><div class="kpi-label">Região com maior potencial</div><div class="kpi-value" id="map-kpi-regiao-top" style="font-size:18px;">—</div></div>
+        <div class="kpi warn"><div class="kpi-label">Segmento mais promissor</div><div class="kpi-value" id="map-kpi-segmento-top" style="font-size:18px;">—</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+        <select class="form-select" id="map-filtro-status" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todos os status</option>
+          <option value="identificada">Identificada</option>
+          <option value="qualificada">Qualificada</option>
+          <option value="descartada">Descartada</option>
+          <option value="convertida">Convertida</option>
+        </select>
+        <select class="form-select" id="map-filtro-segmento" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todos os segmentos</option>
+        </select>
+        <select class="form-select" id="map-filtro-cidade" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todas as cidades</option>
+        </select>
+        <select class="form-select" id="map-filtro-origem" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todas as origens</option>
+        </select>
+        <select class="form-select" id="map-filtro-potencial" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todo o potencial</option>
+          <option value="alto">Alto</option>
+          <option value="medio">Médio</option>
+          <option value="baixo">Baixo</option>
+        </select>
+        <select class="form-select" id="map-filtro-responsavel" style="max-width:170px;" onchange="renderMapeamento()">
+          <option value="todos">Todos os responsáveis</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="padding:0 18px;">
+          <table class="tbl">
+            <thead><tr><th>Oportunidade</th><th>Empresa</th><th>Cidade/UF</th><th>Origem</th><th>Potencial</th><th>Status</th><th></th></tr></thead>
+            <tbody id="map-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="map-empty" class="empty" style="display:none">
+        <div class="empty-icon">🗺️</div>
+        <div class="empty-text">Nenhuma oportunidade mapeada ainda.<br>Clique em <strong>+ Nova Oportunidade Mapeada</strong> para começar.</div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-prospeccao">
+      <div class="sec-header">
+        <div><div class="sec-title">Prospecção de Clientes</div><div class="sec-sub">Cadastre prospects, vincule material e envie pelo WhatsApp com 1 clique</div></div>
+        <button class="btn btn-primary" onclick="openModal('modal-prospect')">+ Novo Prospect</button>
+      </div>
+
+      <!-- FUNIL RESUMO -->
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px;">
+        <div class="kpi blue"><div class="kpi-label">Total prospects</div><div class="kpi-value" id="kpi-total-prosp">0</div><div class="kpi-delta">Cadastrados</div></div>
+        <div class="kpi warn"><div class="kpi-label">Aguardando contato</div><div class="kpi-value" id="kpi-aguard">0</div><div class="kpi-delta">Não contatados</div></div>
+        <div class="kpi green"><div class="kpi-label">Material enviado</div><div class="kpi-value" id="kpi-enviado">0</div><div class="kpi-delta">Primeiro contato feito</div></div>
+        <div class="kpi red"><div class="kpi-label">Responderam</div><div class="kpi-value" id="kpi-respondeu">0</div><div class="kpi-delta">Em negociação</div></div>
+      </div>
+
+      <!-- FILTROS -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+        <button class="pill active" onclick="filtrarProsp('todos',this)">Todos</button>
+        <button class="pill" onclick="filtrarProsp('aguardando',this)">⏳ Aguardando contato</button>
+        <button class="pill" onclick="filtrarProsp('enviado',this)">📤 Material enviado</button>
+        <button class="pill" onclick="filtrarProsp('respondeu',this)">💬 Responderam</button>
+        <button class="pill" onclick="filtrarProsp('convertido',this)">✅ Convertidos</button>
+      </div>
+
+      <!-- LISTA -->
+      <div id="prosp-lista"></div>
+      <div id="prosp-empty" class="empty">
+        <div class="empty-icon">🎯</div>
+        <div class="empty-text">Nenhum prospect cadastrado ainda.<br>Clique em <strong>+ Novo Prospect</strong> para começar.</div>
+      </div>
+    </div>
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ===== MODALS ===== -->
+<div class="modal-overlay" id="modal-parceiro" onclick="closeModalOutside(event,'modal-parceiro')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-parceiro-titulo">Novo Parceiro</span><button class="modal-close" onclick="closeModal('modal-parceiro')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome do parceiro *</label><input class="form-input" id="pa-nome" placeholder="Ex: N&E Inox"></div>
+        <div class="form-group"><label class="form-label">CNPJ</label><input class="form-input" id="pa-cnpj" placeholder="00.000.000/0000-00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Segmento *</label><select class="form-select" id="pa-segmento"><option>Cozinhas profissionais</option><option>Decoração</option><option>Industrial</option><option>Atacado</option><option>Outro</option></select></div>
+        <div class="form-group"><label class="form-label">Responsável de contato</label><input class="form-input" id="pa-contato" placeholder="Nome do contato"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Telefone</label><input class="form-input" id="pa-telefone" placeholder="(11) 9 9999-0000"></div>
+        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" id="pa-email" placeholder="contato@empresa.com"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="pa-obs" placeholder="Notas sobre o parceiro..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-parceiro')">Cancelar</button><button class="btn btn-primary" onclick="salvarParceiro()">Salvar parceiro</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-produto" onclick="closeModalOutside(event,'modal-produto')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-produto-titulo">Adicionar Produto ao Catálogo</span><button class="modal-close" onclick="closeModal('modal-produto')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nome do produto *</label><input class="form-input" id="pr2-nome" placeholder="Ex: Forno Combinado 10GN"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Parceiro *</label><select class="form-select" id="pr2-parceiro"><option>N&E Inox</option><option>Decorativo Casa</option><option>Fort Atacadista</option><option>Linha Industrial SP</option></select></div>
+        <div class="form-group"><label class="form-label">Categoria</label><select class="form-select" id="pr2-categoria"><option value="cozinhas">Cozinhas</option><option value="decoracao">Decoração</option><option value="industrial">Industrial</option><option value="atacado">Atacado</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Preço (R$)</label><input class="form-input" id="pr2-preco" placeholder="0,00"></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="pr2-status"><option value="disponivel">Disponível</option><option value="sob_encomenda">Sob encomenda</option><option value="indisponivel">Indisponível</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-input" id="pr2-desc" placeholder="Descrição do produto..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-produto')">Cancelar</button><button class="btn btn-primary" onclick="salvarProduto()">Salvar produto</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-mapeamento" onclick="closeModalOutside(event,'modal-mapeamento')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-mapeamento-titulo">Nova Oportunidade Mapeada</span><button class="modal-close" onclick="closeModal('modal-mapeamento')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome da oportunidade *</label><input class="form-input" id="mp-nome" placeholder="Ex: Ampliação Hotel Costa Verde"></div>
+        <div class="form-group"><label class="form-label">Empresa</label><input class="form-input" id="mp-empresa" placeholder="Nome da empresa"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Segmento</label><input class="form-input" id="mp-segmento" placeholder="Ex: Hotelaria"></div>
+        <div class="form-group"><label class="form-label">Estágio do projeto</label><input class="form-input" id="mp-estagio" placeholder="Ex: Fundação, acabamento..."></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="mp-cidade" placeholder="Ex: Florianópolis"></div>
+        <div class="form-group"><label class="form-label">Estado</label><input class="form-input" id="mp-estado" placeholder="Ex: SC" maxlength="2"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Endereço</label><input class="form-input" id="mp-endereco" placeholder="Rua, número, bairro"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Origem *</label>
+          <select class="form-select" id="mp-origem">
+            <option value="obra">Obra</option>
+            <option value="reforma">Reforma</option>
+            <option value="ampliacao">Ampliação</option>
+            <option value="nova_unidade">Nova unidade</option>
+            <option value="expansao_empresa">Expansão de empresa</option>
+            <option value="arquiteto">Arquiteto</option>
+            <option value="engenheiro">Engenheiro</option>
+            <option value="construtora">Construtora</option>
+            <option value="fornecedor">Fornecedor</option>
+            <option value="cliente">Indicação de cliente</option>
+            <option value="networking">Networking</option>
+            <option value="pesquisa_mercado">Pesquisa de mercado</option>
+            <option value="evento">Evento</option>
+            <option value="visita_campo">Visita de campo</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Responsável</label><select class="form-select" id="mp-responsavel"><option>Edgar</option><option>Nelma</option><option>Administrador</option><option>Luciane</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Potencial financeiro (R$)</label><input class="form-input" id="mp-potencial-fin" placeholder="0,00"></div>
+        <div class="form-group"><label class="form-label">Grau de potencial</label>
+          <select class="form-select" id="mp-grau-potencial">
+            <option value="alto">Alto</option>
+            <option value="medio" selected>Médio</option>
+            <option value="baixo">Baixo</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Status *</label>
+        <select class="form-select" id="mp-status">
+          <option value="identificada">Identificada</option>
+          <option value="qualificada">Qualificada</option>
+          <option value="descartada">Descartada</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="mp-obs" placeholder="Detalhes da oportunidade..."></textarea></div>
+
+      <div id="mp-anexos-wrap" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:16px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">Fotos e documentos</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Tipo</label>
+            <select class="form-select" id="mpa-tipo">
+              <option value="foto">Foto</option>
+              <option value="documento">Documento</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Arquivo</label><input class="form-input" type="file" id="mpa-arquivo" accept=".pdf,.jpg,.jpeg,.png,.webp"></div>
+        </div>
+        <button class="btn btn-outline btn-sm" id="mpa-btn-enviar" onclick="enviarAnexoMapeamento()">+ Enviar anexo</button>
+        <div id="mp-anexos-lista" style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;"></div>
+      </div>
+
+      <div id="mp-timeline-wrap" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:16px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">Linha do tempo</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Tipo de contato</label>
+            <select class="form-select" id="mpt-tipo">
+              <option value="visita">Visita de campo</option>
+              <option value="ligacao">Ligação</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="email">E-mail</option>
+              <option value="reuniao">Reunião</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Próximo passo</label><input class="form-input" id="mpt-proximo" placeholder="Ex: Confirmar decisor do projeto"></div>
+        </div>
+        <div class="form-group"><label class="form-label">O que foi observado/tratado</label><textarea class="form-input" id="mpt-descricao" placeholder="Descreva..."></textarea></div>
+        <button class="btn btn-outline btn-sm" onclick="registrarInteracaoMapeamento()">+ Registrar na linha do tempo</button>
+        <div id="mp-timeline-lista" style="margin-top:14px;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-mapeamento')">Cancelar</button>
+      <button class="btn btn-danger" id="mp-btn-excluir" style="display:none" onclick="excluirMapeamentoAtual()">Excluir</button>
+      <button class="btn btn-outline" id="mp-btn-converter" style="display:none;border-color:var(--accent2);color:var(--accent2);" onclick="converterMapeamentoEmCliente()">🔗 Converter em Oportunidade CRM</button>
+      <button class="btn btn-primary" id="mp-btn-salvar" onclick="salvarMapeamento()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cliente" onclick="closeModalOutside(event,'modal-cliente')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-cliente-titulo">Novo Cliente</span><button class="modal-close" onclick="closeModal('modal-cliente')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome / Razão social *</label><input class="form-input" id="cl-nome" placeholder="Ex: Restaurante Bela Vista"></div>
+        <div class="form-group"><label class="form-label">CNPJ</label><input class="form-input" id="cl-cnpj" placeholder="00.000.000/0000-00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Telefone</label><input class="form-input" id="cl-telefone" placeholder="(11) 9 9999-0000"></div>
+        <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" id="cl-email" placeholder="contato@empresa.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Segmento</label><select class="form-select" id="cl-segmento"><option>Gastronomia</option><option>Hotelaria</option><option>Construção</option><option>Varejo</option><option>Saúde</option><option>Outro</option></select></div>
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="cl-cidade" placeholder="Ex: São Paulo"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Etapa do funil *</label>
+          <select class="form-select" id="cl-etapa">
+            <option value="novo_contato">Novo Contato</option>
+            <option value="qualificado">Qualificado</option>
+            <option value="em_negociacao">Em Negociação</option>
+            <option value="proposta_enviada">Proposta Enviada</option>
+            <option value="aguardando_retorno">Aguardando Retorno</option>
+            <option value="fechado">Fechado</option>
+            <option value="perdido">Perdido</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Valor potencial (R$)</label><input class="form-input" id="cl-valor-potencial" placeholder="0,00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Responsável pelo cadastro</label><select class="form-select" id="cl-resp-cadastro"><option>Edgar</option><option>Nelma</option><option>Administrador</option><option>Luciane</option></select></div>
+        <div class="form-group"><label class="form-label">Responsável pela negociação</label><select class="form-select" id="cl-resp-negociacao"><option>Edgar</option><option>Nelma</option><option>Administrador</option><option>Luciane</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Próxima ação</label><input class="form-input" id="cl-proxima-acao" placeholder="Ex: Ligar confirmando proposta"></div>
+        <div class="form-group"><label class="form-label">Data da próxima ação</label><input class="form-input" type="date" id="cl-data-proxima-acao"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="cl-obs" placeholder="Notas sobre o cliente..."></textarea></div>
+
+      <div id="cl-timeline-wrap" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:16px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2)">Histórico de interações</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Tipo de contato</label>
+            <select class="form-select" id="ht-tipo">
+              <option value="whatsapp">WhatsApp</option>
+              <option value="ligacao">Ligação</option>
+              <option value="visita">Visita</option>
+              <option value="email">E-mail</option>
+              <option value="reuniao">Reunião</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Próximo passo</label><input class="form-input" id="ht-proximo" placeholder="Ex: Enviar orçamento"></div>
+        </div>
+        <div class="form-group"><label class="form-label">O que foi tratado</label><textarea class="form-input" id="ht-descricao" placeholder="Descreva a interação..."></textarea></div>
+        <button class="btn btn-outline btn-sm" onclick="registrarInteracao()">+ Registrar interação</button>
+        <div id="cl-timeline-lista" style="margin-top:14px;"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-cliente')">Cancelar</button>
+      <button class="btn btn-danger" id="cl-btn-excluir" style="display:none" onclick="excluirClienteAtual()">Excluir</button>
+      <button class="btn btn-primary" id="cl-btn-salvar" onclick="salvarCliente()">Salvar cliente</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-orc" onclick="closeModalOutside(event,'modal-orc')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-orc-titulo">Novo Orçamento</span><button class="modal-close" onclick="closeModal('modal-orc')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Cliente *</label><input class="form-input" id="or-cliente" placeholder="Nome do cliente"></div>
+        <div class="form-group"><label class="form-label">Parceiro *</label><select class="form-select" id="or-parceiro"><option>N&E Inox</option><option>Decorativo Casa</option><option>Fort Atacadista</option><option>Linha Industrial SP</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Produtos / Itens</label><textarea class="form-input" id="or-produtos" placeholder="Liste os produtos e quantidades..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Valor total (R$)</label><input class="form-input" id="or-valor" placeholder="0,00"></div>
+        <div class="form-group"><label class="form-label">Vendedor</label><select class="form-select" id="or-vendedor"><option>Edgar</option><option>Direta</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Validade</label><input class="form-input" type="date" id="or-validade"></div>
+        <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="or-status"><option value="aguardando">Aguardando</option><option value="negociando">Negociando</option><option value="follow">Follow-up</option><option value="aprovado">Aprovado</option><option value="recusado">Recusado</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Anexar PDF do orçamento</label><input class="form-input" type="file" accept="application/pdf" id="or-anexo"></div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="or-obs" placeholder="Condições, prazo de entrega..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-orc')">Cancelar</button>
+      <button class="btn btn-danger" id="or-btn-excluir" style="display:none" onclick="excluirOrcamentoAtual()">Excluir</button>
+      <button class="btn btn-outline" id="or-btn-pedido" style="display:none" onclick="gerarPedidoDoOrcamento()">Gerar pedido</button>
+      <button class="btn btn-primary" id="or-btn-salvar" onclick="salvarOrcamento()">Criar orçamento</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pedido" onclick="closeModalOutside(event,'modal-pedido')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Novo Pedido</span><button class="modal-close" onclick="closeModal('modal-pedido')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Cliente *</label><input class="form-input" id="pe-cliente" placeholder="Nome do cliente"></div>
+      <div class="form-group"><label class="form-label">Produto(s) *</label><input class="form-input" id="pe-produto" placeholder="Ex: Forno Combinado 10GN + Fritadeira 30L"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Valor (R$)</label><input class="form-input" id="pe-valor" placeholder="0,00"></div>
+        <div class="form-group"><label class="form-label">Status</label>
+          <select class="form-select" id="pe-status">
+            <option value="novo">Novo</option>
+            <option value="producao">Em produção</option>
+            <option value="faturado">Faturado</option>
+            <option value="entregue">Entregue</option>
+            <option value="cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Anexar arquivo do pedido</label><input class="form-input" type="file" id="pe-anexo" accept=".pdf,.jpg,.jpeg,.png"></div>
+      <div class="form-group"><label class="form-label">Observações</label><textarea class="form-input" id="pe-obs" placeholder="Detalhes do pedido..."></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-pedido')">Cancelar</button><button class="btn btn-primary" id="pe-btn-salvar" onclick="salvarPedido()">Salvar pedido</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-meta" onclick="closeModalOutside(event,'modal-meta')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-meta-titulo">Nova Meta</span><button class="modal-close" onclick="closeModal('modal-meta')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Descrição da meta *</label><input class="form-input" id="mt-descricao" placeholder="Ex: Faturamento anual"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Categoria</label><select class="form-select" id="mt-categoria"><option value="geral">Geral</option><option value="area">Por área</option><option value="parceiro">Por parceiro</option></select></div>
+        <div class="form-group"><label class="form-label">Responsável</label><select class="form-select" id="mt-responsavel"><option>Edgar</option><option>Nelma</option><option>Equipe geral</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Valor alvo (R$)</label><input class="form-input" id="mt-valor-alvo" placeholder="0,00"></div>
+        <div class="form-group"><label class="form-label">Valor realizado (R$)</label><input class="form-input" id="mt-valor-realizado" placeholder="0,00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Início</label><input class="form-input" type="date" id="mt-inicio"></div>
+        <div class="form-group"><label class="form-label">Prazo</label><input class="form-input" type="date" id="mt-prazo"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-meta')">Cancelar</button>
+      <button class="btn btn-danger" id="mt-btn-excluir" style="display:none" onclick="excluirMetaAtual()">Excluir</button>
+      <button class="btn btn-primary" id="mt-btn-salvar" onclick="salvarMeta()">Salvar meta</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-visita" onclick="closeModalOutside(event,'modal-visita')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-visita-titulo">Agendar Visita — Edgar</span><button class="modal-close" onclick="closeModal('modal-visita')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Cliente *</label><input class="form-input" id="vi-cliente" placeholder="Nome do cliente"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Data *</label><input class="form-input" type="date" id="vi-data"></div>
+        <div class="form-group"><label class="form-label">Cidade</label><input class="form-input" id="vi-cidade" placeholder="Ex: São Paulo"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Objetivo da visita</label><input class="form-input" id="vi-objetivo" placeholder="Ex: Apresentar catálogo N&E Inox"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Parceiro relacionado</label><select class="form-select" id="vi-parceiro"><option>N&E Inox</option><option>Decorativo Casa</option><option>Fort Atacadista</option><option>Linha Industrial SP</option></select></div>
+        <div class="form-group"><label class="form-label">Km previsto</label><input class="form-input" id="vi-km" placeholder="0"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="vi-status"><option value="agendado">Agendado</option><option value="realizado">Realizado</option><option value="prioridade">Prioridade</option><option value="cancelado">Cancelado</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-visita')">Cancelar</button>
+      <button class="btn btn-danger" id="vi-btn-excluir" style="display:none" onclick="excluirVisitaAtual()">Excluir</button>
+      <button class="btn btn-primary" id="vi-btn-salvar" onclick="salvarVisita()">Agendar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-comissao" onclick="closeModalOutside(event,'modal-comissao')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="modal-comissao-titulo">Nova Comissão</span><button class="modal-close" onclick="closeModal('modal-comissao')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Pessoa / Parceiro *</label><input class="form-input" id="cm-pessoa" placeholder="Ex: Edgar"></div>
+        <div class="form-group"><label class="form-label">Mês de referência *</label><input class="form-input" type="month" id="cm-mes"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Qtd. de vendas</label><input class="form-input" id="cm-vendas" placeholder="Ex: 12"></div>
+        <div class="form-group"><label class="form-label">Volume vendido (R$)</label><input class="form-input" id="cm-volume" placeholder="0,00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">% Comissão (deixe vazio se fixo)</label><input class="form-input" id="cm-percentual" placeholder="Ex: 5"></div>
+        <div class="form-group"><label class="form-label">Valor da comissão (R$) *</label><input class="form-input" id="cm-valor" placeholder="0,00"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Status</label><select class="form-select" id="cm-status"><option value="a_pagar">A pagar</option><option value="pago">Pago</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-comissao')">Cancelar</button>
+      <button class="btn btn-danger" id="cm-btn-excluir" style="display:none" onclick="excluirComissaoAtual()">Excluir</button>
+      <button class="btn btn-primary" id="cm-btn-salvar" onclick="salvarComissao()">Salvar comissão</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal-overlay" id="modal-apresentacao" onclick="closeModalOutside(event,'modal-apresentacao')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Nova Apresentação</span><button class="modal-close" onclick="closeModal('modal-apresentacao')">×</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Título da apresentação *</label><input class="form-input" id="apres-titulo" placeholder="Ex: Portfólio MS — Geral"></div>
+      <div class="form-group"><label class="form-label">Parceiro / Assunto</label><select class="form-select" id="apres-parceiro"><option value="">— Geral MS —</option><option>N&amp;E Inox</option><option>Decorativo Casa</option><option>Fort Atacadista</option><option>Linha Industrial SP</option><option>Outro</option></select></div>
+      <div class="form-group">
+        <label class="form-label">Link do Google Drive *</label>
+        <input class="form-input" id="apres-link" placeholder="https://drive.google.com/file/d/...">
+        <div style="font-size:11px;color:var(--text3);margin-top:5px;">No Google Drive: clique com botão direito no PDF → Compartilhar → Copiar link</div>
+      </div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-input" id="apres-desc" placeholder="Breve descrição do conteúdo..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-apresentacao')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarApresentacao()">Salvar apresentação</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-overlay" id="modal-usuario" onclick="closeModalOutside(event,'modal-usuario')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Novo Usuário</span><button class="modal-close" onclick="closeModal('modal-usuario')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome completo *</label><input class="form-input" id="nu-nome" placeholder="Ex: Edgar Silva"></div>
+        <div class="form-group"><label class="form-label">Usuário (login) *</label><input class="form-input" id="nu-user" placeholder="edgar.silva"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Senha *</label><input class="form-input" id="nu-senha" type="password" placeholder="Mínimo 4 caracteres"></div>
+        <div class="form-group"><label class="form-label">Perfil *</label>
+          <select class="form-select" id="nu-perfil">
+            <option value="admin">Admin</option>
+            <option value="vendedor">Vendedor</option>
+            <option value="backoffice">Back-office</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">E-mail</label><input class="form-input" id="nu-email" placeholder="email@empresa.com"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-usuario')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarUsuario()">Criar usuário</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-perfil-info" onclick="closeModalOutside(event,'modal-perfil-info')">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-header"><span class="modal-title">Minha conta</span><button class="modal-close" onclick="closeModal('modal-perfil-info')">×</button></div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div class="avatar" style="width:44px;height:44px;font-size:16px;" id="modal-avatar-big">MS</div>
+        <div><div style="font-size:14px;font-weight:600" id="modal-user-nome">—</div><div style="font-size:12px;color:var(--text3)" id="modal-user-perfil">—</div></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" onclick="doLogout()">Sair do sistema</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL NOVO PROSPECT -->
+<div class="modal-overlay" id="modal-prospect" onclick="closeModalOutside(event,'modal-prospect')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Novo Prospect</span><button class="modal-close" onclick="closeModal('modal-prospect')">×</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nome / Empresa *</label><input class="form-input" id="pr-nome" placeholder="Ex: Restaurante Bela Vista"></div>
+        <div class="form-group"><label class="form-label">CNPJ</label><input class="form-input" id="pr-cnpj" placeholder="00.000.000/0000-00"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Responsável</label><input class="form-input" id="pr-resp" placeholder="Ex: João Silva"></div>
+        <div class="form-group"><label class="form-label">WhatsApp *</label><input class="form-input" id="pr-wpp" placeholder="5511999990000" maxlength="20"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Segmento</label>
+          <select class="form-select" id="pr-seg">
+            <option>Gastronomia</option>
+            <option>Hotelaria</option>
+            <option>Construção</option>
+            <option>Varejo</option>
+            <option>Saúde</option>
+            <option>Indústria</option>
+            <option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Catálogo / Apresentação para enviar</label>
+        <select class="form-select" id="pr-catalogo">
+          <option value="">— Selecione o material —</option>
+          <option value="portfolio">📄 Portfólio MS — Geral</option>
+          <option value="neinox">🍳 Catálogo N&amp;E Inox</option>
+          <option value="fort">📦 Catálogo Fort Atacadista</option>
+          <option value="decorativo">🏡 Catálogo Decorativo Casa</option>
+          <option value="custom">🔗 Outro link...</option>
+        </select>
+      </div>
+      <div class="form-group" id="pr-link-wrap" style="display:none">
+        <label class="form-label">Link do material (Google Drive)</label>
+        <input class="form-input" id="pr-link-custom" placeholder="https://drive.google.com/...">
+      </div>
+      <div class="form-group"><label class="form-label">Observação</label><textarea class="form-input" id="pr-obs" placeholder="Como chegou até esse lead, contexto..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-prospect')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarProspect()">Salvar prospect</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL MENSAGEM WHATSAPP -->
+<div class="modal-overlay" id="modal-msg-wpp" onclick="closeModalOutside(event,'modal-msg-wpp')">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-header"><span class="modal-title">📲 Enviar via WhatsApp</span><button class="modal-close" onclick="closeModal('modal-msg-wpp')">×</button></div>
+    <div class="modal-body">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">Mensagem gerada automaticamente. Edite se quiser e clique em <strong>Abrir WhatsApp</strong>.</div>
+      <textarea class="form-input" id="msg-wpp-texto" style="min-height:180px;font-size:13px;line-height:1.7"></textarea>
+      <div style="margin-top:12px;font-size:11px;color:var(--text3)">O WhatsApp Web vai abrir com essa mensagem já preenchida — só clicar em Enviar.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-msg-wpp')">Cancelar</button>
+      <button class="btn btn-primary" style="background:#25D366;" onclick="abrirWhatsApp()">📲 Abrir WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-icon">✅</span><span id="toast-msg">Salvo!</span></div>
+
+<script>
+// ============================================================
+// SUPABASE — conexão com o banco de dados real
+// ============================================================
+const SUPABASE_URL = 'https://rhqogwislpaiveecyfir.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_v9Z1HFIu8KqK1rQGShZWTw_agWttyEk';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Domínio fictício usado para transformar o "usuário" (ex: admin, edgar)
+// em um e-mail válido para o Supabase Auth, mantendo o login por usuário na tela.
+const AUTH_DOMAIN = '@msrepresentacoes.app';
+
+const titles = {
+  dashboard:'Dashboard', parceiros:'Parceiros / Fornecedores', catalogo:'Catálogo de Produtos',
+  crm:'CRM — Clientes', orcamentos:'Orçamentos', pedidos:'Pedidos', comissoes:'Comissões',
+  metas:'Metas', rotas:'Rotas — Edgar', apresentacoes:'Apresentações', relatorios:'Relatórios',
+  'painel-gestora':'Painel da Gestora', mapeamento:'Mapeamento de Oportunidades'
+};
+const btnLabels = {
+  dashboard:'+ Novo Orçamento', parceiros:'+ Novo Parceiro', catalogo:'+ Adicionar Produto',
+  crm:'+ Novo Cliente', orcamentos:'+ Novo Orçamento', pedidos:'+ Novo Pedido', comissoes:'+ Nova Comissão',
+  metas:'+ Nova Meta', rotas:'+ Agendar Visita', apresentacoes:'+ Nova', relatorios:'↓ Gerar PDF'
+};
+const btnActions = {
+  dashboard:()=>abrirNovoOrcamento(), parceiros:()=>abrirNovoParceiro(),
+  catalogo:()=>abrirNovoProduto(), crm:()=>abrirNovoCliente(),
+  orcamentos:()=>abrirNovoOrcamento(), pedidos:()=>abrirNovoPedido(), comissoes:()=>abrirNovaComissao(),
+  metas:()=>abrirNovaMeta(), rotas:()=>abrirNovaVisita(),
+  apresentacoes:()=>showToast('Criando apresentação...'), relatorios:()=>window.print()
+};
+
+let currentScreen = 'dashboard';
+let currentBtnAction = btnActions['dashboard'];
+
+function goTo(id, el) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('page-title').textContent = titles[id];
+  const btn = document.getElementById('topbar-btn');
+  if (btnLabels[id]) { btn.textContent = btnLabels[id]; btn.style.display = ''; }
+  else { btn.style.display = 'none'; }
+  currentBtnAction = btnActions[id];
+  currentScreen = id;
+  if (id === 'relatorios' && typeof renderRelatorios === 'function') renderRelatorios();
+  if (id === 'painel-gestora' && typeof renderPainelGestora === 'function') renderPainelGestora();
+  if (id === 'mapeamento' && typeof inicializarMapaOportunidades === 'function') inicializarMapaOportunidades();
+}
+
+function topbarAction(){ currentBtnAction && currentBtnAction(); }
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModalOutside(e,id){ if(e.target.id===id) closeModal(id); }
+
+function saveAndClose(modalId, msg){
+  const modal = document.getElementById(modalId);
+  modal.querySelectorAll('input, textarea').forEach(el => { el.value = ''; });
+  modal.querySelectorAll('select').forEach(el => { el.selectedIndex = 0; });
+  closeModal(modalId);
+  showToast(msg);
+}
+
+let toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+function filterParceiros(val){
+  const rows = document.querySelectorAll('.partner-row');
+  rows.forEach(r=>{
+    const text = r.textContent.toLowerCase();
+    r.style.display = text.includes(val.toLowerCase()) ? '' : 'none';
+  });
+}
+
+// ===== PARCEIROS (real, Supabase) =====
+let parceiros = [];
+let parceiroEditandoId = null;
+const PARCEIRO_ICONES = {'Cozinhas profissionais':'🍳','Decoração':'🏡','Industrial':'🔧','Atacado':'📦','Outro':'🤝'};
+
+async function carregarParceiros(){
+  const { data, error } = await sb.from('parceiros').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar parceiros: ' + error.message); return; }
+  parceiros = data || [];
+  renderParceiros();
+}
+
+function renderParceiros(){
+  const body = document.getElementById('parceiros-list-body');
+  const empty = document.getElementById('parceiros-empty');
+  const list = document.getElementById('parceiros-list');
+  const badge = document.getElementById('badge-parceiros');
+  if (badge) badge.textContent = parceiros.length;
+  if (!body) return;
+  if (parceiros.length === 0) {
+    list.style.display = 'none';
+    empty.style.display = '';
+    return;
+  }
+  list.style.display = '';
+  empty.style.display = 'none';
+  body.innerHTML = parceiros.map(p => `
+    <div class="partner-row" data-seg="${(p.segmento||'').toLowerCase()}">
+      <div class="p-icon" style="background:rgba(59,127,255,0.1)">${PARCEIRO_ICONES[p.segmento] || '🤝'}</div>
+      <div style="flex:1"><div class="p-name">${p.nome}</div><div class="p-seg">${p.segmento || ''}${p.contato ? ' • ' + p.contato : ''}${p.cnpj ? ' • CNPJ ' + p.cnpj : ''}</div></div>
+      <span class="status ativo"><span class="dot"></span>Ativo</span>
+      <div class="p-actions">
+        <button class="btn btn-outline btn-sm" onclick="editarParceiro('${p.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirParceiro('${p.id}')">Excluir</button>
+      </div>
+    </div>`).join('');
+}
+
+function abrirNovoParceiro(){
+  parceiroEditandoId = null;
+  document.getElementById('modal-parceiro-titulo').textContent = 'Novo Parceiro';
+  ['pa-nome','pa-cnpj','pa-contato','pa-telefone','pa-email','pa-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pa-segmento').selectedIndex = 0;
+  openModal('modal-parceiro');
+}
+
+function editarParceiro(id){
+  const p = parceiros.find(x => x.id === id);
+  if (!p) return;
+  parceiroEditandoId = id;
+  document.getElementById('modal-parceiro-titulo').textContent = 'Editar Parceiro';
+  document.getElementById('pa-nome').value = p.nome || '';
+  document.getElementById('pa-cnpj').value = p.cnpj || '';
+  document.getElementById('pa-contato').value = p.contato || '';
+  document.getElementById('pa-telefone').value = p.telefone || '';
+  document.getElementById('pa-email').value = p.email || '';
+  document.getElementById('pa-obs').value = p.observacoes || '';
+  document.getElementById('pa-segmento').value = p.segmento || 'Outro';
+  openModal('modal-parceiro');
+}
+
+async function salvarParceiro(){
+  const nome = document.getElementById('pa-nome').value.trim();
+  if (!nome) { showToast('Preencha o nome do parceiro!'); return; }
+  const payload = {
+    nome,
+    cnpj: document.getElementById('pa-cnpj').value.trim(),
+    segmento: document.getElementById('pa-segmento').value,
+    contato: document.getElementById('pa-contato').value.trim(),
+    telefone: document.getElementById('pa-telefone').value.trim(),
+    email: document.getElementById('pa-email').value.trim(),
+    observacoes: document.getElementById('pa-obs').value.trim(),
+    atualizado_em: new Date().toISOString()
+  };
+
+  let error;
+  if (parceiroEditandoId) {
+    ({ error } = await sb.from('parceiros').update(payload).eq('id', parceiroEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('parceiros').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  closeModal('modal-parceiro');
+  await carregarParceiros();
+  showToast(parceiroEditandoId ? 'Parceiro atualizado!' : 'Parceiro cadastrado!');
+  parceiroEditandoId = null;
+}
+
+async function excluirParceiro(id){
+  const p = parceiros.find(x => x.id === id);
+  if (!confirm('Excluir o parceiro ' + (p ? p.nome : '') + '?')) return;
+  const { error } = await sb.from('parceiros').delete().eq('id', id);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  await carregarParceiros();
+  showToast('Parceiro removido.');
+}
+
+// ===== CRM CLIENTES (real, Supabase) =====
+// ===== MAPEAMENTO DE OPORTUNIDADES (Módulo 2) =====
+let mapeamentos = [];
+let mapeamentoEditandoId = null;
+const MAP_STATUS_LABEL = {identificada:'Identificada', qualificada:'Qualificada', descartada:'Descartada', convertida:'Convertida'};
+const MAP_STATUS_CLASS = {identificada:'novo', qualificada:'pendente', descartada:'inativo', convertida:'ativo'};
+const MAP_ORIGEM_LABEL = {
+  obra:'Obra', reforma:'Reforma', ampliacao:'Ampliação', nova_unidade:'Nova unidade',
+  expansao_empresa:'Expansão de empresa', arquiteto:'Arquiteto', engenheiro:'Engenheiro',
+  construtora:'Construtora', fornecedor:'Fornecedor', cliente:'Indicação de cliente',
+  networking:'Networking', pesquisa_mercado:'Pesquisa de mercado', evento:'Evento',
+  visita_campo:'Visita de campo', outro:'Outro'
+};
+const MAP_GRAU_LABEL = {alto:'Alto', medio:'Médio', baixo:'Baixo'};
+
+async function carregarMapeamento(){
+  const { data, error } = await sb.from('mapeamento_oportunidades').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar mapeamento: ' + error.message); return; }
+  mapeamentos = data || [];
+  popularFiltrosMapeamento();
+  renderMapeamento();
+  atualizarMarcadoresMapa();
+}
+
+// ===== MAPA GEOGRÁFICO (Leaflet + OpenStreetMap, sem necessidade de chave de API) =====
+let mapaLeaflet = null;
+let marcadoresMapaLayer = null;
+
+function inicializarMapaOportunidades(){
+  const container = document.getElementById('mapa-oportunidades');
+  if (!container) return;
+  if (!mapaLeaflet) {
+    mapaLeaflet = L.map('mapa-oportunidades').setView([-14.235, -51.925], 4); // centro do Brasil
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors', maxZoom: 18
+    }).addTo(mapaLeaflet);
+    marcadoresMapaLayer = L.layerGroup().addTo(mapaLeaflet);
+  }
+  // Corrige o tamanho do mapa (Leaflet precisa disso quando o container estava escondido)
+  setTimeout(() => { mapaLeaflet.invalidateSize(); atualizarMarcadoresMapa(); }, 150);
+}
+
+function atualizarMarcadoresMapa(){
+  if (!mapaLeaflet || !marcadoresMapaLayer) return;
+  marcadoresMapaLayer.clearLayers();
+  const comCoordenadas = mapeamentos.filter(m => m.latitude && m.longitude);
+  comCoordenadas.forEach(m => {
+    const cor = m.status === 'convertida' ? '#22c55e' : m.status === 'descartada' ? '#6b7280' : m.status === 'qualificada' ? '#3b82f6' : '#f59e0b';
+    const marker = L.circleMarker([m.latitude, m.longitude], {
+      radius: 8, color: cor, fillColor: cor, fillOpacity: 0.8, weight: 2
+    }).addTo(marcadoresMapaLayer);
+    marker.bindPopup(`<strong>${m.nome}</strong><br>${m.empresa || ''}<br>${m.cidade || ''}${m.estado ? '/' + m.estado : ''}<br>${MAP_STATUS_LABEL[m.status] || m.status}`);
+    marker.on('click', () => abrirFichaMapeamento(m.id));
+  });
+  if (comCoordenadas.length > 0) {
+    const bounds = L.latLngBounds(comCoordenadas.map(m => [m.latitude, m.longitude]));
+    mapaLeaflet.fitBounds(bounds, { padding: [30,30], maxZoom: 12 });
+  }
+}
+
+// Geocodificação gratuita via Nominatim (OpenStreetMap) — converte cidade/endereço em coordenadas
+async function geocodificarEndereco(endereco, cidade, estado){
+  const query = [endereco, cidade, estado, 'Brasil'].filter(Boolean).join(', ');
+  if (!query) return null;
+  try {
+    const resp = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=' + encodeURIComponent(query));
+    const data = await resp.json();
+    if (data && data[0]) return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+  } catch (e) { /* geocodificação é best-effort, silenciosamente ignora falha */ }
+  return null;
+}
+
+function popularFiltrosMapeamento(){
+  const preencher = (id, valores) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const atual = sel.value;
+    const primeiraOpcao = sel.options[0].outerHTML;
+    sel.innerHTML = primeiraOpcao + [...new Set(valores.filter(Boolean))].sort().map(v => `<option value="${v}">${v}</option>`).join('');
+    if ([...sel.options].some(o => o.value === atual)) sel.value = atual;
+  };
+  preencher('map-filtro-segmento', mapeamentos.map(m => m.segmento));
+  preencher('map-filtro-cidade', mapeamentos.map(m => m.cidade));
+  preencher('map-filtro-responsavel', mapeamentos.map(m => m.responsavel_id));
+
+  const selOrigem = document.getElementById('map-filtro-origem');
+  if (selOrigem && selOrigem.options.length <= 1) {
+    selOrigem.innerHTML = '<option value="todos">Todas as origens</option>' +
+      Object.entries(MAP_ORIGEM_LABEL).map(([v,l]) => `<option value="${v}">${l}</option>`).join('');
+  }
+}
+
+function renderMapeamento(){
+  const tbody = document.getElementById('map-tbody');
+  const empty = document.getElementById('map-empty');
+  const badge = document.getElementById('badge-mapeamento');
+  if (!tbody) return;
+  if (badge) badge.textContent = mapeamentos.filter(m => m.status !== 'convertida' && m.status !== 'descartada').length;
+
+  const fStatus = document.getElementById('map-filtro-status').value;
+  const fSeg = document.getElementById('map-filtro-segmento').value;
+  const fCidade = document.getElementById('map-filtro-cidade').value;
+  const fOrigem = document.getElementById('map-filtro-origem').value;
+  const fPotencial = document.getElementById('map-filtro-potencial').value;
+  const fResp = document.getElementById('map-filtro-responsavel').value;
+
+  const filtrados = mapeamentos.filter(m =>
+    (fStatus === 'todos' || m.status === fStatus) &&
+    (fSeg === 'todos' || m.segmento === fSeg) &&
+    (fCidade === 'todos' || m.cidade === fCidade) &&
+    (fOrigem === 'todos' || m.origem === fOrigem) &&
+    (fPotencial === 'todos' || m.grau_potencial === fPotencial) &&
+    (fResp === 'todos' || m.responsavel_id === fResp)
+  );
+
+  if (filtrados.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = filtrados.map(m => `
+      <tr>
+        <td>${m.nome}</td>
+        <td><span style="color:var(--text3)">${m.empresa || '—'}</span></td>
+        <td><span style="color:var(--text3)">${m.cidade || ''}${m.estado ? '/' + m.estado : ''}</span></td>
+        <td><span class="tag">${MAP_ORIGEM_LABEL[m.origem] || m.origem || '—'}</span></td>
+        <td>${MAP_GRAU_LABEL[m.grau_potencial] || '—'}${m.potencial_financeiro ? ' · R$ ' + Number(m.potencial_financeiro).toLocaleString('pt-BR') : ''}</td>
+        <td><span class="status ${MAP_STATUS_CLASS[m.status] || 'novo'}"><span class="dot"></span>${MAP_STATUS_LABEL[m.status] || m.status}</span></td>
+        <td><button class="btn btn-outline btn-sm" onclick="abrirFichaMapeamento('${m.id}')">Ficha</button></td>
+      </tr>`).join('');
+  }
+
+  // KPIs
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('map-kpi-identificadas', mapeamentos.filter(m => m.status === 'identificada').length);
+  set('map-kpi-qualificadas', mapeamentos.filter(m => m.status === 'qualificada').length);
+  set('map-kpi-descartadas', mapeamentos.filter(m => m.status === 'descartada').length);
+  set('map-kpi-convertidas', mapeamentos.filter(m => m.status === 'convertida').length);
+  const potencialTotal = mapeamentos.filter(m => m.status !== 'descartada').reduce((s,m) => s + Number(m.potencial_financeiro || 0), 0);
+  set('map-kpi-potencial', 'R$ ' + potencialTotal.toLocaleString('pt-BR'));
+
+  const porRegiao = {};
+  mapeamentos.forEach(m => { if (m.cidade) porRegiao[m.cidade] = (porRegiao[m.cidade] || 0) + Number(m.potencial_financeiro || 0); });
+  const regiaoTop = Object.entries(porRegiao).sort((a,b) => b[1]-a[1])[0];
+  set('map-kpi-regiao-top', regiaoTop ? regiaoTop[0] : '—');
+
+  const porSegmento = {};
+  mapeamentos.forEach(m => { if (m.segmento) porSegmento[m.segmento] = (porSegmento[m.segmento] || 0) + 1; });
+  const segmentoTop = Object.entries(porSegmento).sort((a,b) => b[1]-a[1])[0];
+  set('map-kpi-segmento-top', segmentoTop ? segmentoTop[0] : '—');
+}
+
+function abrirNovoMapeamento(){
+  mapeamentoEditandoId = null;
+  document.getElementById('modal-mapeamento-titulo').textContent = 'Nova Oportunidade Mapeada';
+  document.getElementById('mp-btn-salvar').textContent = 'Salvar';
+  document.getElementById('mp-btn-excluir').style.display = 'none';
+  document.getElementById('mp-btn-converter').style.display = 'none';
+  document.getElementById('mp-timeline-wrap').style.display = 'none';
+  document.getElementById('mp-anexos-wrap').style.display = 'none';
+  ['mp-nome','mp-empresa','mp-segmento','mp-estagio','mp-cidade','mp-estado','mp-endereco','mp-potencial-fin','mp-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mp-origem').selectedIndex = 0;
+  document.getElementById('mp-responsavel').value = usuarioAtual ? usuarioAtual.nome : 'Edgar';
+  document.getElementById('mp-grau-potencial').value = 'medio';
+  document.getElementById('mp-status').value = 'identificada';
+  openModal('modal-mapeamento');
+}
+
+async function abrirFichaMapeamento(id){
+  const m = mapeamentos.find(x => x.id === id);
+  if (!m) return;
+  mapeamentoEditandoId = id;
+  document.getElementById('modal-mapeamento-titulo').textContent = 'Ficha da Oportunidade Mapeada';
+  document.getElementById('mp-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('mp-btn-excluir').style.display = '';
+  document.getElementById('mp-btn-converter').style.display = m.status === 'convertida' ? 'none' : '';
+  document.getElementById('mp-nome').value = m.nome || '';
+  document.getElementById('mp-empresa').value = m.empresa || '';
+  document.getElementById('mp-segmento').value = m.segmento || '';
+  document.getElementById('mp-estagio').value = m.estagio_projeto || '';
+  document.getElementById('mp-cidade').value = m.cidade || '';
+  document.getElementById('mp-estado').value = m.estado || '';
+  document.getElementById('mp-endereco').value = m.endereco || '';
+  document.getElementById('mp-origem').value = m.origem || 'obra';
+  document.getElementById('mp-responsavel').value = m.responsavel_id || 'Edgar';
+  document.getElementById('mp-potencial-fin').value = m.potencial_financeiro || '';
+  document.getElementById('mp-grau-potencial').value = m.grau_potencial || 'medio';
+  document.getElementById('mp-status').value = m.status === 'convertida' ? 'qualificada' : m.status;
+  document.getElementById('mp-obs').value = m.observacoes || '';
+  document.getElementById('mp-timeline-wrap').style.display = '';
+  document.getElementById('mp-timeline-lista').innerHTML = '<div style="color:var(--text3);font-size:12px">Carregando linha do tempo...</div>';
+  document.getElementById('mp-anexos-wrap').style.display = '';
+  document.getElementById('mp-anexos-lista').innerHTML = '<div style="color:var(--text3);font-size:12px">Carregando anexos...</div>';
+  openModal('modal-mapeamento');
+  await carregarTimelineMapeamento(id);
+  await carregarAnexosMapeamento(id);
+}
+
+// ===== ANEXOS (fotos e documentos) da oportunidade mapeada =====
+async function carregarAnexosMapeamento(mapeamentoId){
+  const { data, error } = await sb.from('mapeamento_anexos').select('*').eq('mapeamento_id', mapeamentoId).order('criado_em', { ascending: false });
+  const lista = document.getElementById('mp-anexos-lista');
+  if (error) { lista.innerHTML = '<div style="color:var(--danger);font-size:12px">Erro ao carregar anexos: ' + error.message + '</div>'; return; }
+  if (!data || data.length === 0) { lista.innerHTML = '<div style="color:var(--text3);font-size:12px">Nenhum anexo enviado ainda.</div>'; return; }
+  lista.innerHTML = data.map(a => {
+    const ehImagem = a.tipo === 'foto' || /\.(jpg|jpeg|png|webp)$/i.test(a.nome || '');
+    return `
+    <div style="position:relative;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--bg2);">
+      <a href="${a.url}" target="_blank" style="display:block;">
+        ${ehImagem
+          ? `<img src="${a.url}" style="width:100%;height:70px;object-fit:cover;display:block;">`
+          : `<div style="height:70px;display:flex;align-items:center;justify-content:center;font-size:28px;">📄</div>`}
+      </a>
+      <div style="font-size:10px;color:var(--text3);padding:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.nome || ''}</div>
+      <button onclick="excluirAnexoMapeamento('${a.id}')" style="position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:#fff;border:none;border-radius:4px;width:18px;height:18px;font-size:11px;cursor:pointer;line-height:1;">×</button>
+    </div>`;
+  }).join('');
+}
+
+async function enviarAnexoMapeamento(){
+  if (!mapeamentoEditandoId) { showToast('Salve a oportunidade antes de anexar arquivos.'); return; }
+  const arquivo = document.getElementById('mpa-arquivo').files[0];
+  if (!arquivo) { showToast('Escolha um arquivo primeiro.'); return; }
+  const btn = document.getElementById('mpa-btn-enviar');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  const caminho = mapeamentoEditandoId + '/' + Date.now() + '_' + arquivo.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+  const { error: uploadError } = await sb.storage.from('anexos-mapeamento').upload(caminho, arquivo);
+  if (uploadError) {
+    showToast('Erro ao enviar: ' + uploadError.message);
+    btn.disabled = false; btn.textContent = '+ Enviar anexo';
+    return;
+  }
+  const { data: urlData } = sb.storage.from('anexos-mapeamento').getPublicUrl(caminho);
+
+  const { error } = await sb.from('mapeamento_anexos').insert({
+    mapeamento_id: mapeamentoEditandoId,
+    url: urlData.publicUrl,
+    nome: arquivo.name,
+    tipo: document.getElementById('mpa-tipo').value
+  });
+  btn.disabled = false; btn.textContent = '+ Enviar anexo';
+  if (error) { showToast('Erro ao salvar anexo: ' + error.message); return; }
+
+  document.getElementById('mpa-arquivo').value = '';
+  await carregarAnexosMapeamento(mapeamentoEditandoId);
+  showToast('Anexo enviado!');
+}
+
+async function excluirAnexoMapeamento(anexoId){
+  if (!confirm('Excluir esse anexo?')) return;
+  const { error } = await sb.from('mapeamento_anexos').delete().eq('id', anexoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  await carregarAnexosMapeamento(mapeamentoEditandoId);
+  showToast('Anexo removido.');
+}
+
+async function carregarTimelineMapeamento(mapeamentoId){
+  const { data, error } = await sb.from('historico_contatos').select('*').eq('mapeamento_id', mapeamentoId).order('criado_em', { ascending: false });
+  const lista = document.getElementById('mp-timeline-lista');
+  if (error) { lista.innerHTML = '<div style="color:var(--danger);font-size:12px">Erro: ' + error.message + '</div>'; return; }
+  if (!data || data.length === 0) { lista.innerHTML = '<div style="color:var(--text3);font-size:12px">Nenhum registro ainda.</div>'; return; }
+  lista.innerHTML = data.map(h => `
+    <div style="border-left:2px solid var(--border);padding:6px 0 6px 12px;margin-bottom:8px;">
+      <div style="font-size:11px;color:var(--text3);">${new Date(h.criado_em).toLocaleString('pt-BR')} · ${TIPO_CONTATO_LABEL[h.tipo] || h.tipo}</div>
+      <div style="font-size:13px;color:var(--text);margin-top:2px;">${h.descricao || ''}</div>
+      ${h.proximo_passo ? `<div style="font-size:12px;color:var(--accent2);margin-top:2px;">Próximo passo: ${h.proximo_passo}</div>` : ''}
+    </div>`).join('');
+}
+
+async function registrarInteracaoMapeamento(){
+  if (!mapeamentoEditandoId) { showToast('Salve a oportunidade antes de registrar.'); return; }
+  const descricao = document.getElementById('mpt-descricao').value.trim();
+  if (!descricao) { showToast('Descreva o que foi observado.'); return; }
+  const { error } = await sb.from('historico_contatos').insert({
+    mapeamento_id: mapeamentoEditandoId,
+    tipo: document.getElementById('mpt-tipo').value,
+    descricao,
+    proximo_passo: document.getElementById('mpt-proximo').value.trim(),
+    usuario_id: usuarioAtual ? usuarioAtual.id : null
+  });
+  if (error) { showToast('Erro ao registrar: ' + error.message); return; }
+  await sb.from('mapeamento_oportunidades').update({ atualizado_em: new Date().toISOString() }).eq('id', mapeamentoEditandoId);
+  document.getElementById('mpt-descricao').value = '';
+  document.getElementById('mpt-proximo').value = '';
+  await carregarTimelineMapeamento(mapeamentoEditandoId);
+  await carregarMapeamento();
+  showToast('Registrado na linha do tempo!');
+}
+
+async function salvarMapeamento(){
+  const nome = document.getElementById('mp-nome').value.trim();
+  if (!nome) { showToast('Preencha o nome da oportunidade!'); return; }
+  const potTexto = document.getElementById('mp-potencial-fin').value.replace(/\./g,'').replace(',','.');
+  const cidade = document.getElementById('mp-cidade').value.trim();
+  const estado = document.getElementById('mp-estado').value.trim().toUpperCase();
+  const endereco = document.getElementById('mp-endereco').value.trim();
+
+  const btn = document.getElementById('mp-btn-salvar');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+
+  const payload = {
+    nome,
+    empresa: document.getElementById('mp-empresa').value.trim(),
+    segmento: document.getElementById('mp-segmento').value.trim(),
+    estagio_projeto: document.getElementById('mp-estagio').value.trim(),
+    cidade,
+    estado,
+    endereco,
+    origem: document.getElementById('mp-origem').value,
+    responsavel_id: document.getElementById('mp-responsavel').value,
+    potencial_financeiro: potTexto ? parseFloat(potTexto) : null,
+    grau_potencial: document.getElementById('mp-grau-potencial').value,
+    status: document.getElementById('mp-status').value,
+    observacoes: document.getElementById('mp-obs').value.trim(),
+    atualizado_em: new Date().toISOString()
+  };
+
+  // Geocodifica em segundo plano se a cidade/endereço mudou (não bloqueia o salvamento em caso de falha)
+  const existente = mapeamentoEditandoId ? mapeamentos.find(x => x.id === mapeamentoEditandoId) : null;
+  const enderecoMudou = !existente || existente.cidade !== cidade || existente.endereco !== endereco;
+  if ((cidade || endereco) && enderecoMudou) {
+    const coords = await geocodificarEndereco(endereco, cidade, estado);
+    if (coords) { payload.latitude = coords.lat; payload.longitude = coords.lng; }
+  }
+
+  let error;
+  if (mapeamentoEditandoId) {
+    ({ error } = await sb.from('mapeamento_oportunidades').update(payload).eq('id', mapeamentoEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('mapeamento_oportunidades').insert(payload));
+  }
+  btn.disabled = false; btn.textContent = mapeamentoEditandoId ? 'Salvar alterações' : 'Salvar';
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  closeModal('modal-mapeamento');
+  await carregarMapeamento();
+  showToast(mapeamentoEditandoId ? 'Oportunidade atualizada!' : 'Oportunidade mapeada com sucesso!');
+  mapeamentoEditandoId = null;
+}
+
+async function excluirMapeamentoAtual(){
+  if (!mapeamentoEditandoId) return;
+  const m = mapeamentos.find(x => x.id === mapeamentoEditandoId);
+  if (!confirm('Excluir a oportunidade mapeada ' + (m ? m.nome : '') + '?')) return;
+  const { error } = await sb.from('mapeamento_oportunidades').delete().eq('id', mapeamentoEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-mapeamento');
+  mapeamentoEditandoId = null;
+  await carregarMapeamento();
+  showToast('Oportunidade removida.');
+}
+
+// Promove a oportunidade mapeada para dentro do CRM (Módulo 3),
+// preservando todo o histórico já registrado.
+async function converterMapeamentoEmCliente(){
+  const m = mapeamentos.find(x => x.id === mapeamentoEditandoId);
+  if (!m) return;
+  if (!confirm('Converter "' + m.nome + '" em uma oportunidade comercial no CRM? O histórico será preservado.')) return;
+
+  const { data: novoCliente, error } = await sb.from('clientes').insert({
+    nome: m.empresa || m.nome,
+    cidade: m.cidade,
+    segmento: m.segmento,
+    etapa: 'qualificado',
+    valor_potencial: m.potencial_financeiro,
+    responsavel_cadastro_id: m.responsavel_id,
+    responsavel_negociacao_id: m.responsavel_id,
+    observacoes: 'Convertido do Mapeamento de Oportunidades: ' + m.nome + (m.observacoes ? ' — ' + m.observacoes : ''),
+    criado_por: usuarioAtual ? usuarioAtual.id : null
+  }).select().single();
+
+  if (error) { showToast('Erro ao converter: ' + error.message); return; }
+
+  // Vincula o mapeamento ao novo cliente e marca como convertida
+  await sb.from('mapeamento_oportunidades').update({ status: 'convertida', cliente_id: novoCliente.id, atualizado_em: new Date().toISOString() }).eq('id', m.id);
+
+  // Migra o histórico de interações do mapeamento para o cliente, preservando tudo
+  await sb.from('historico_contatos').update({ cliente_id: novoCliente.id }).eq('mapeamento_id', m.id);
+
+  closeModal('modal-mapeamento');
+  await carregarMapeamento();
+  await carregarClientes();
+  showToast('Convertida em oportunidade comercial no CRM! Histórico preservado.');
+}
+
+let clientes = [];
+let clienteEditandoId = null;
+let crmFiltroAtual = 'todos';
+const ETAPA_LABEL = {
+  novo_contato:'Novo Contato', qualificado:'Qualificado', em_negociacao:'Em Negociação',
+  proposta_enviada:'Proposta Enviada', aguardando_retorno:'Aguardando Retorno',
+  fechado:'Fechado', perdido:'Perdido'
+};
+const ETAPA_CLASS = {
+  novo_contato:'novo', qualificado:'pendente', em_negociacao:'ativo',
+  proposta_enviada:'pendente', aguardando_retorno:'pendente',
+  fechado:'ativo', perdido:'inativo'
+};
+const TIPO_CONTATO_LABEL = {whatsapp:'WhatsApp', ligacao:'Ligação', visita:'Visita', email:'E-mail', reuniao:'Reunião'};
+
+async function carregarClientes(){
+  const { data, error } = await sb.from('clientes').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar clientes: ' + error.message); return; }
+  clientes = data || [];
+  renderClientes();
+  atualizarDashboardComercial();
+  renderPainelGestora();
+}
+
+function renderClientes(){
+  const tbody = document.getElementById('crm-tbody');
+  const empty = document.getElementById('crm-empty');
+  const badge = document.getElementById('badge-crm');
+  if (!tbody) return;
+
+  const counts = {todos:clientes.length, novo_contato:0, qualificado:0, em_negociacao:0, proposta_enviada:0, aguardando_retorno:0, fechado:0, perdido:0};
+  clientes.forEach(c => { if (counts[c.etapa] !== undefined) counts[c.etapa]++; });
+  Object.keys(counts).forEach(k => { const el = document.getElementById('crm-count-'+k); if (el) el.textContent = counts[k]; });
+  if (badge) badge.textContent = clientes.length;
+
+  const filtrados = crmFiltroAtual === 'todos' ? clientes : clientes.filter(c => c.etapa === crmFiltroAtual);
+
+  if (filtrados.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = filtrados.map(c => `
+    <tr>
+      <td>${c.nome}</td>
+      <td><span style="color:var(--text3);font-size:11px">${c.telefone || c.email || '—'}</span></td>
+      <td><span class="tag">${c.segmento || '—'}</span></td>
+      <td><span style="color:var(--text3)">${c.responsavel_negociacao_id || c.vendedor || '—'}</span></td>
+      <td><span style="color:var(--text3);font-size:11px">${new Date(c.atualizado_em || c.criado_em).toLocaleDateString('pt-BR')}</span></td>
+      <td><span class="status ${ETAPA_CLASS[c.etapa] || 'ativo'}"><span class="dot"></span>${ETAPA_LABEL[c.etapa] || c.etapa}</span></td>
+      <td style="white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="abrirFichaCliente('${c.id}')">Ficha</button></td>
+    </tr>`).join('');
+}
+
+function setCrmFilter(f, el){
+  crmFiltroAtual = f;
+  document.querySelectorAll('#screen-crm .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderClientes();
+}
+
+function abrirNovoCliente(){
+  clienteEditandoId = null;
+  document.getElementById('modal-cliente-titulo').textContent = 'Novo Cliente';
+  document.getElementById('cl-btn-salvar').textContent = 'Salvar cliente';
+  document.getElementById('cl-btn-excluir').style.display = 'none';
+  document.getElementById('cl-timeline-wrap').style.display = 'none';
+  ['cl-nome','cl-cnpj','cl-telefone','cl-email','cl-cidade','cl-obs','cl-valor-potencial','cl-proxima-acao','cl-data-proxima-acao'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cl-segmento').selectedIndex = 0;
+  document.getElementById('cl-resp-cadastro').value = usuarioAtual ? usuarioAtual.nome : 'Edgar';
+  document.getElementById('cl-resp-negociacao').selectedIndex = 0;
+  document.getElementById('cl-etapa').value = 'novo_contato';
+  openModal('modal-cliente');
+}
+
+async function abrirFichaCliente(id){
+  const c = clientes.find(x => x.id === id);
+  if (!c) return;
+  clienteEditandoId = id;
+  document.getElementById('modal-cliente-titulo').textContent = 'Ficha do Cliente';
+  document.getElementById('cl-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('cl-btn-excluir').style.display = '';
+  document.getElementById('cl-nome').value = c.nome || '';
+  document.getElementById('cl-cnpj').value = c.cnpj || '';
+  document.getElementById('cl-telefone').value = c.telefone || '';
+  document.getElementById('cl-email').value = c.email || '';
+  document.getElementById('cl-cidade').value = c.cidade || '';
+  document.getElementById('cl-obs').value = c.observacoes || '';
+  document.getElementById('cl-segmento').value = c.segmento || 'Gastronomia';
+  document.getElementById('cl-etapa').value = c.etapa || 'novo_contato';
+  document.getElementById('cl-valor-potencial').value = c.valor_potencial || '';
+  document.getElementById('cl-resp-cadastro').value = c.responsavel_cadastro_id || 'Edgar';
+  document.getElementById('cl-resp-negociacao').value = c.responsavel_negociacao_id || 'Edgar';
+  document.getElementById('cl-proxima-acao').value = c.proxima_acao || '';
+  document.getElementById('cl-data-proxima-acao').value = c.data_proxima_acao || '';
+  document.getElementById('cl-timeline-wrap').style.display = '';
+  document.getElementById('cl-timeline-lista').innerHTML = '<div style="color:var(--text3);font-size:12px">Carregando histórico...</div>';
+  openModal('modal-cliente');
+  await carregarTimelineCliente(id);
+}
+
+async function carregarTimelineCliente(clienteId){
+  const { data, error } = await sb.from('historico_contatos').select('*').eq('cliente_id', clienteId).order('criado_em', { ascending: false });
+  const lista = document.getElementById('cl-timeline-lista');
+  if (error) { lista.innerHTML = '<div style="color:var(--danger);font-size:12px">Erro ao carregar histórico: ' + error.message + '</div>'; return; }
+  if (!data || data.length === 0) { lista.innerHTML = '<div style="color:var(--text3);font-size:12px">Nenhuma interação registrada ainda.</div>'; return; }
+  lista.innerHTML = data.map(h => `
+    <div style="border-left:2px solid var(--border);padding:6px 0 6px 12px;margin-bottom:8px;">
+      <div style="font-size:11px;color:var(--text3);">${new Date(h.criado_em).toLocaleString('pt-BR')} · ${TIPO_CONTATO_LABEL[h.tipo] || h.tipo}</div>
+      <div style="font-size:13px;color:var(--text);margin-top:2px;">${h.descricao || ''}</div>
+      ${h.proximo_passo ? `<div style="font-size:12px;color:var(--accent2);margin-top:2px;">Próximo passo: ${h.proximo_passo}</div>` : ''}
+    </div>`).join('');
+}
+
+async function registrarInteracao(){
+  if (!clienteEditandoId) { showToast('Salve o cliente antes de registrar uma interação.'); return; }
+  const descricao = document.getElementById('ht-descricao').value.trim();
+  if (!descricao) { showToast('Descreva o que foi tratado.'); return; }
+  const { error } = await sb.from('historico_contatos').insert({
+    cliente_id: clienteEditandoId,
+    tipo: document.getElementById('ht-tipo').value,
+    descricao,
+    proximo_passo: document.getElementById('ht-proximo').value.trim(),
+    usuario_id: usuarioAtual ? usuarioAtual.id : null
+  });
+  if (error) { showToast('Erro ao registrar: ' + error.message); return; }
+  // Também atualiza a data da última atualização do cliente
+  await sb.from('clientes').update({ atualizado_em: new Date().toISOString() }).eq('id', clienteEditandoId);
+  document.getElementById('ht-descricao').value = '';
+  document.getElementById('ht-proximo').value = '';
+  await carregarTimelineCliente(clienteEditandoId);
+  await carregarClientes();
+  showToast('Interação registrada!');
+}
+
+async function salvarCliente(){
+  const nome = document.getElementById('cl-nome').value.trim();
+  const etapa = document.getElementById('cl-etapa').value;
+  if (!nome) { showToast('Preencha o nome do cliente!'); return; }
+  if (!etapa) { showToast('Selecione a etapa do funil!'); return; }
+  const valorPotTexto = document.getElementById('cl-valor-potencial').value.replace(/\./g,'').replace(',','.');
+  const payload = {
+    nome,
+    cnpj: document.getElementById('cl-cnpj').value.trim(),
+    telefone: document.getElementById('cl-telefone').value.trim(),
+    email: document.getElementById('cl-email').value.trim(),
+    cidade: document.getElementById('cl-cidade').value.trim(),
+    segmento: document.getElementById('cl-segmento').value,
+    etapa,
+    valor_potencial: valorPotTexto ? parseFloat(valorPotTexto) : null,
+    responsavel_cadastro_id: document.getElementById('cl-resp-cadastro').value,
+    responsavel_negociacao_id: document.getElementById('cl-resp-negociacao').value,
+    proxima_acao: document.getElementById('cl-proxima-acao').value.trim(),
+    data_proxima_acao: document.getElementById('cl-data-proxima-acao').value || null,
+    observacoes: document.getElementById('cl-obs').value.trim(),
+    atualizado_em: new Date().toISOString()
+  };
+  if (etapa === 'fechado') {
+    payload.data_fechamento = new Date().toISOString();
+    payload.valor_convertido = payload.valor_potencial;
+  }
+
+  let error;
+  if (clienteEditandoId) {
+    ({ error } = await sb.from('clientes').update(payload).eq('id', clienteEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('clientes').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  closeModal('modal-cliente');
+  await carregarClientes();
+  showToast(clienteEditandoId ? 'Cliente atualizado!' : 'Cliente cadastrado!');
+  clienteEditandoId = null;
+}
+
+async function excluirClienteAtual(){
+  if (!clienteEditandoId) return;
+  const c = clientes.find(x => x.id === clienteEditandoId);
+  if (!confirm('Excluir o cliente ' + (c ? c.nome : '') + '?')) return;
+  const { error } = await sb.from('clientes').delete().eq('id', clienteEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-cliente');
+  clienteEditandoId = null;
+  await carregarClientes();
+  showToast('Cliente removido.');
+}
+
+function diasEntre(d1, d2){ return Math.round((d2 - d1) / (1000*60*60*24)); }
+function hojeISO(){ return new Date().toISOString().slice(0,10); }
+function ehHoje(dataStr){
+  if (!dataStr) return false;
+  return new Date(dataStr).toDateString() === new Date().toDateString();
+}
+
+function atualizarDashboardComercial(){
+  const kpiClientes = document.getElementById('kpi-clientes-ativos');
+  if (kpiClientes) kpiClientes.textContent = clientes.length;
+
+  const abertos = clientes.filter(c => c.etapa !== 'fechado' && c.etapa !== 'perdido');
+  const fechados = clientes.filter(c => c.etapa === 'fechado');
+  const perdidos = clientes.filter(c => c.etapa === 'perdido');
+  const taxa = (fechados.length + perdidos.length) > 0 ? Math.round(fechados.length / (fechados.length + perdidos.length) * 100) : 0;
+
+  const tempos = fechados.filter(c => c.data_fechamento && c.criado_em).map(c => diasEntre(new Date(c.criado_em), new Date(c.data_fechamento)));
+  const tempoMedio = tempos.length ? Math.round(tempos.reduce((a,b)=>a+b,0) / tempos.length) : null;
+
+  const valorPotencial = abertos.reduce((s,c) => s + Number(c.valor_potencial || 0), 0);
+  const valorConvertido = fechados.reduce((s,c) => s + Number(c.valor_convertido || c.valor_potencial || 0), 0);
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('kpi-oport-abertas', abertos.length);
+  set('kpi-taxa-conversao', taxa + '%');
+  set('kpi-tempo-fechamento', tempoMedio !== null ? tempoMedio + ' dias' : '—');
+  set('kpi-valor-potencial', 'R$ ' + valorPotencial.toLocaleString('pt-BR'));
+  set('kpi-valor-convertido', 'Convertido: R$ ' + valorConvertido.toLocaleString('pt-BR'));
+
+  // Grid de etapas do funil
+  const etapasGrid = document.getElementById('funil-etapas-grid');
+  if (etapasGrid) {
+    etapasGrid.innerHTML = Object.keys(ETAPA_LABEL).map(et => {
+      const qtd = clientes.filter(c => c.etapa === et).length;
+      return `<div style="text-align:center;background:var(--bg2);border-radius:10px;padding:10px 4px;">
+        <div style="font-size:20px;font-weight:700;color:var(--text)">${qtd}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${ETAPA_LABEL[et]}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Ranking por responsável
+  const rankingEl = document.getElementById('ranking-responsavel');
+  if (rankingEl) {
+    const porResp = {};
+    clientes.forEach(c => {
+      const r = c.responsavel_negociacao_id || 'Não definido';
+      if (!porResp[r]) porResp[r] = { total:0, fechados:0 };
+      porResp[r].total++;
+      if (c.etapa === 'fechado') porResp[r].fechados++;
+    });
+    const linhas = Object.entries(porResp).sort((a,b) => b[1].total - a[1].total);
+    rankingEl.innerHTML = linhas.length ? linhas.map(([nome, d]) => `
+      <div class="com-row"><div><div style="font-size:13px;font-weight:600">${nome}</div><div style="font-size:11px;color:var(--text3)">${d.total} oportunidades</div></div><div class="com-val">${d.fechados} fechados</div></div>
+    `).join('') : '<div style="color:var(--text3);font-size:12px;">Nenhum dado ainda.</div>';
+  }
+
+  // Oportunidades sem movimentação há mais de 7 dias
+  const paradasEl = document.getElementById('oport-paradas');
+  if (paradasEl) {
+    const paradas = abertos.filter(c => diasEntre(new Date(c.atualizado_em || c.criado_em), new Date()) > 7);
+    paradasEl.innerHTML = paradas.length ? paradas.slice(0,6).map(c => `
+      <div class="com-row"><div><div style="font-size:13px;font-weight:600">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${ETAPA_LABEL[c.etapa]}</div></div><div class="com-val" style="color:var(--warn)">${diasEntre(new Date(c.atualizado_em || c.criado_em), new Date())}d parado</div></div>
+    `).join('') : '<div style="color:var(--text3);font-size:12px;">Nenhuma oportunidade parada. 🎉</div>';
+  }
+
+  // Clientes recentes (dashboard)
+  const dashBody = document.getElementById('dash-clientes-recentes');
+  if (dashBody) {
+    dashBody.innerHTML = clientes.slice(0,5).map(c => `
+      <tr><td>${c.nome}</td><td><span style="color:var(--text3)">${c.responsavel_negociacao_id || '—'}</span></td><td><span class="status ${ETAPA_CLASS[c.etapa] || 'ativo'}"><span class="dot"></span>${ETAPA_LABEL[c.etapa] || c.etapa}</span></td><td><button class="btn btn-outline btn-sm" onclick="goTo('crm',document.querySelector('.nav-item[onclick*=crm]'));abrirFichaCliente('${c.id}')">Ver</button></td></tr>`).join('');
+  }
+}
+
+function renderPainelGestora(){
+  if (!document.getElementById('screen-painel-gestora')) return;
+
+  const novosHoje = clientes.filter(c => ehHoje(c.criado_em));
+  const atualizadosHoje = clientes.filter(c => ehHoje(c.atualizado_em) && !ehHoje(c.criado_em));
+  const parados = clientes.filter(c => c.etapa !== 'fechado' && c.etapa !== 'perdido' && diasEntre(new Date(c.atualizado_em || c.criado_em), new Date()) > 7);
+  const acoesHoje = clientes.filter(c => c.data_proxima_acao === hojeISO());
+  const acoesAtraso = clientes.filter(c => c.data_proxima_acao && c.data_proxima_acao < hojeISO() && c.etapa !== 'fechado' && c.etapa !== 'perdido');
+  const fechadosHoje = clientes.filter(c => c.etapa === 'fechado' && ehHoje(c.data_fechamento));
+  const perdidosHoje = clientes.filter(c => c.etapa === 'perdido' && ehHoje(c.atualizado_em));
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('pg-novos-hoje', novosHoje.length);
+  set('pg-atualizados-hoje', atualizadosHoje.length);
+  set('pg-parados', parados.length);
+  set('pg-atrasadas', acoesAtraso.length);
+
+  const lista = (items, vazio, render) => items.length
+    ? items.map(render).join('')
+    : `<div style="color:var(--text3);font-size:12px;">${vazio}</div>`;
+
+  const linhaCliente = (c, extra) => `
+    <div class="com-row" style="cursor:pointer" onclick="goTo('crm',document.querySelector('.nav-item[onclick*=crm]'));abrirFichaCliente('${c.id}')">
+      <div><div style="font-size:13px;font-weight:600">${c.nome}</div><div style="font-size:11px;color:var(--text3)">${ETAPA_LABEL[c.etapa] || ''}</div></div>
+      <div class="com-val">${extra}</div>
+    </div>`;
+
+  document.getElementById('pg-acoes-hoje').innerHTML = lista(acoesHoje, 'Nenhuma ação prevista para hoje.', c => linhaCliente(c, c.proxima_acao || ''));
+  document.getElementById('pg-acoes-atraso').innerHTML = lista(acoesAtraso, 'Nenhuma ação em atraso. 🎉', c => linhaCliente(c, c.data_proxima_acao));
+  document.getElementById('pg-lista-novos').innerHTML = lista(novosHoje, 'Nenhum cliente novo hoje.', c => linhaCliente(c, new Date(c.criado_em).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})));
+  document.getElementById('pg-lista-parados').innerHTML = lista(parados, 'Nenhuma oportunidade parada. 🎉', c => linhaCliente(c, diasEntre(new Date(c.atualizado_em || c.criado_em), new Date()) + 'd'));
+  document.getElementById('pg-lista-fechados').innerHTML = lista(fechadosHoje, 'Nenhum fechamento hoje ainda.', c => linhaCliente(c, 'R$ ' + Number(c.valor_convertido || c.valor_potencial || 0).toLocaleString('pt-BR')));
+  document.getElementById('pg-lista-perdidos').innerHTML = lista(perdidosHoje, 'Nenhuma perda hoje.', c => linhaCliente(c, ''));
+}
+
+// ===== PEDIDOS (real, Supabase) =====
+let pedidos = [];
+const PEDIDO_STATUS_LABEL = {novo:'Novo', producao:'Em produção', faturado:'Faturado', entregue:'Entregue', cancelado:'Cancelado'};
+const PEDIDO_STATUS_CLASS = {novo:'novo', producao:'pendente', faturado:'ativo', entregue:'ativo', cancelado:'inativo'};
+
+async function carregarPedidos(){
+  const { data, error } = await sb.from('pedidos').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar pedidos: ' + error.message); return; }
+  pedidos = data || [];
+  renderPedidos();
+}
+
+function renderPedidos(){
+  const lista = document.getElementById('pedidos-lista');
+  const empty = document.getElementById('pedidos-empty');
+  const badge = document.getElementById('badge-pedidos');
+  if (!lista) return;
+  if (badge) badge.textContent = pedidos.length;
+  if (pedidos.length === 0) { lista.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  lista.innerHTML = pedidos.map(p => `
+    <div class="orc-card">
+      <div class="orc-num">${p.numero}</div>
+      <div class="orc-info">
+        <div class="orc-client">${p.cliente_nome}</div>
+        <div class="orc-detail">${p.produto ? p.produto + ' · ' : ''}${new Date(p.criado_em).toLocaleDateString('pt-BR')}${p.observacoes ? ' · ' + p.observacoes : ''}</div>
+        ${p.anexo_url ? `<a href="${p.anexo_url}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:underline;">📎 ${p.anexo_nome || 'Ver anexo'}</a>` : ''}
+      </div>
+      <div class="orc-val">${p.valor ? 'R$ ' + Number(p.valor).toLocaleString('pt-BR') : '—'}</div>
+      <span class="status ${PEDIDO_STATUS_CLASS[p.status]}"><span class="dot"></span>${PEDIDO_STATUS_LABEL[p.status]}</span>
+    </div>`).join('');
+}
+
+function abrirNovoPedido(){
+  ['pe-cliente','pe-produto','pe-valor','pe-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pe-status').value = 'novo';
+  document.getElementById('pe-anexo').value = '';
+  openModal('modal-pedido');
+}
+
+async function salvarPedido(){
+  const cliente = document.getElementById('pe-cliente').value.trim();
+  const produto = document.getElementById('pe-produto').value.trim();
+  if (!cliente || !produto) { showToast('Preencha cliente e produto!'); return; }
+  const btn = document.getElementById('pe-btn-salvar');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+
+  const numero = '#' + String(1000 + pedidos.length + 1);
+  const valorTexto = document.getElementById('pe-valor').value.replace(/\./g,'').replace(',','.');
+
+  let anexo_url = null, anexo_nome = null;
+  const arquivo = document.getElementById('pe-anexo').files[0];
+  if (arquivo) {
+    const caminho = Date.now() + '_' + arquivo.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const { error: uploadError } = await sb.storage.from('anexos-pedidos').upload(caminho, arquivo);
+    if (uploadError) {
+      showToast('Erro ao enviar anexo: ' + uploadError.message);
+      btn.disabled = false; btn.textContent = 'Salvar pedido';
+      return;
+    }
+    const { data: urlData } = sb.storage.from('anexos-pedidos').getPublicUrl(caminho);
+    anexo_url = urlData.publicUrl;
+    anexo_nome = arquivo.name;
+  }
+
+  const { error } = await sb.from('pedidos').insert({
+    numero, cliente_nome: cliente, produto,
+    valor: valorTexto ? parseFloat(valorTexto) : null,
+    status: document.getElementById('pe-status').value,
+    observacoes: document.getElementById('pe-obs').value.trim(),
+    anexo_url, anexo_nome,
+    criado_por: usuarioAtual ? usuarioAtual.id : null
+  });
+  btn.disabled = false; btn.textContent = 'Salvar pedido';
+  if (error) { showToast('Erro ao salvar pedido: ' + error.message); return; }
+  closeModal('modal-pedido');
+  await carregarPedidos();
+  showToast('Pedido criado!');
+}
+
+// ===== ORÇAMENTOS (real, Supabase) =====
+let orcamentos = [];
+let orcamentoEditandoId = null;
+let orcFiltroAtual = 'aberto';
+const ORC_STATUS_LABEL = {aguardando:'Aguardando', negociando:'Negociando', follow:'Follow-up', aprovado:'Aprovado', recusado:'Recusado'};
+const ORC_STATUS_CLASS = {aguardando:'pendente', negociando:'ativo', follow:'inativo', aprovado:'novo', recusado:'inativo'};
+
+async function carregarOrcamentos(){
+  const { data, error } = await sb.from('orcamentos').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar orçamentos: ' + error.message); return; }
+  orcamentos = data || [];
+  renderOrcamentos();
+  atualizarDashboardOrcamentos();
+}
+
+function renderOrcamentos(){
+  const list = document.getElementById('orc-list');
+  const empty = document.getElementById('orc-empty');
+  const badge = document.getElementById('badge-orc');
+  const sub = document.getElementById('orc-sub');
+  if (!list) return;
+
+  const abertos = orcamentos.filter(o => ['aguardando','negociando','follow'].includes(o.status));
+  const counts = {aberto:abertos.length, aprovado:0, recusado:0};
+  orcamentos.forEach(o => { if (o.status === 'aprovado') counts.aprovado++; if (o.status === 'recusado') counts.recusado++; });
+  Object.keys(counts).forEach(k => { const el = document.getElementById('orc-count-'+k); if (el) el.textContent = counts[k]; });
+  if (badge) badge.textContent = abertos.length;
+  if (sub) sub.textContent = abertos.length + ' em aberto · ' + counts.aprovado + ' aprovados';
+
+  let filtrados = orcamentos;
+  if (orcFiltroAtual === 'aberto') filtrados = abertos;
+  else if (orcFiltroAtual === 'aprovado') filtrados = orcamentos.filter(o => o.status === 'aprovado');
+  else if (orcFiltroAtual === 'recusado') filtrados = orcamentos.filter(o => o.status === 'recusado');
+
+  if (filtrados.length === 0) { list.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  list.innerHTML = filtrados.map(o => `
+    <div class="orc-card" onclick="abrirFichaOrcamento('${o.id}')">
+      <div class="orc-num">${o.numero}</div>
+      <div class="orc-info"><div class="orc-client">${o.cliente_nome}</div><div class="orc-detail">${o.parceiro ? o.parceiro + ' · ' : ''}${o.vendedor ? o.vendedor + ' · ' : ''}${new Date(o.criado_em).toLocaleDateString('pt-BR')}</div></div>
+      <div class="orc-val">${o.valor ? 'R$ ' + Number(o.valor).toLocaleString('pt-BR') : '—'}</div>
+      <span class="status ${ORC_STATUS_CLASS[o.status] || 'pendente'}"><span class="dot"></span>${ORC_STATUS_LABEL[o.status] || o.status}</span>
+    </div>`).join('');
+}
+
+function setOrcFilter(f, el){
+  orcFiltroAtual = f;
+  document.querySelectorAll('#screen-orcamentos .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderOrcamentos();
+}
+
+function abrirNovoOrcamento(){
+  orcamentoEditandoId = null;
+  document.getElementById('modal-orc-titulo').textContent = 'Novo Orçamento';
+  document.getElementById('or-btn-salvar').textContent = 'Criar orçamento';
+  document.getElementById('or-btn-excluir').style.display = 'none';
+  document.getElementById('or-btn-pedido').style.display = 'none';
+  ['or-cliente','or-produtos','or-valor','or-validade','or-obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('or-anexo').value = '';
+  document.getElementById('or-parceiro').selectedIndex = 0;
+  document.getElementById('or-vendedor').selectedIndex = 0;
+  document.getElementById('or-status').value = 'aguardando';
+  openModal('modal-orc');
+}
+
+function abrirFichaOrcamento(id){
+  const o = orcamentos.find(x => x.id === id);
+  if (!o) return;
+  orcamentoEditandoId = id;
+  document.getElementById('modal-orc-titulo').textContent = 'Ficha do Orçamento ' + (o.numero || '');
+  document.getElementById('or-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('or-btn-excluir').style.display = '';
+  document.getElementById('or-btn-pedido').style.display = '';
+  document.getElementById('or-cliente').value = o.cliente_nome || '';
+  document.getElementById('or-produtos').value = o.produtos || '';
+  document.getElementById('or-valor').value = o.valor ? String(o.valor).replace('.', ',') : '';
+  document.getElementById('or-validade').value = o.validade || '';
+  document.getElementById('or-obs').value = o.observacoes || '';
+  document.getElementById('or-anexo').value = '';
+  document.getElementById('or-parceiro').value = o.parceiro || 'N&E Inox';
+  document.getElementById('or-vendedor').value = o.vendedor || 'Edgar';
+  document.getElementById('or-status').value = o.status || 'aguardando';
+  openModal('modal-orc');
+}
+
+async function salvarOrcamento(){
+  const cliente = document.getElementById('or-cliente').value.trim();
+  if (!cliente) { showToast('Preencha o cliente!'); return; }
+  const btn = document.getElementById('or-btn-salvar');
+  btn.disabled = true; btn.textContent = 'Salvando...';
+
+  const valorTexto = document.getElementById('or-valor').value.replace(/\./g,'').replace(',','.');
+
+  let anexo_url, anexo_nome;
+  const arquivo = document.getElementById('or-anexo').files[0];
+  if (arquivo) {
+    const caminho = Date.now() + '_' + arquivo.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const { error: uploadError } = await sb.storage.from('anexos-orcamentos').upload(caminho, arquivo);
+    if (uploadError) {
+      showToast('Erro ao enviar anexo: ' + uploadError.message);
+      btn.disabled = false; btn.textContent = orcamentoEditandoId ? 'Salvar alterações' : 'Criar orçamento';
+      return;
+    }
+    const { data: urlData } = sb.storage.from('anexos-orcamentos').getPublicUrl(caminho);
+    anexo_url = urlData.publicUrl;
+    anexo_nome = arquivo.name;
+  }
+
+  const payload = {
+    cliente_nome: cliente,
+    parceiro: document.getElementById('or-parceiro').value,
+    produtos: document.getElementById('or-produtos').value.trim(),
+    valor: valorTexto ? parseFloat(valorTexto) : null,
+    vendedor: document.getElementById('or-vendedor').value,
+    validade: document.getElementById('or-validade').value || null,
+    status: document.getElementById('or-status').value,
+    observacoes: document.getElementById('or-obs').value.trim(),
+    atualizado_em: new Date().toISOString()
+  };
+  if (anexo_url) { payload.anexo_url = anexo_url; payload.anexo_nome = anexo_nome; }
+
+  let error;
+  if (orcamentoEditandoId) {
+    ({ error } = await sb.from('orcamentos').update(payload).eq('id', orcamentoEditandoId));
+  } else {
+    payload.numero = '#' + String(1000 + orcamentos.length + 1);
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('orcamentos').insert(payload));
+  }
+  btn.disabled = false; btn.textContent = orcamentoEditandoId ? 'Salvar alterações' : 'Criar orçamento';
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  closeModal('modal-orc');
+  await carregarOrcamentos();
+  showToast(orcamentoEditandoId ? 'Orçamento atualizado!' : 'Orçamento criado!');
+  orcamentoEditandoId = null;
+}
+
+async function excluirOrcamentoAtual(){
+  if (!orcamentoEditandoId) return;
+  const o = orcamentos.find(x => x.id === orcamentoEditandoId);
+  if (!confirm('Excluir o orçamento ' + (o ? o.numero : '') + '?')) return;
+  const { error } = await sb.from('orcamentos').delete().eq('id', orcamentoEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-orc');
+  orcamentoEditandoId = null;
+  await carregarOrcamentos();
+  showToast('Orçamento removido.');
+}
+
+async function gerarPedidoDoOrcamento(){
+  if (!orcamentoEditandoId) return;
+  const o = orcamentos.find(x => x.id === orcamentoEditandoId);
+  if (!o) return;
+  const numero = '#' + String(1000 + pedidos.length + 1);
+  const { error } = await sb.from('pedidos').insert({
+    numero, cliente_nome: o.cliente_nome, produto: o.produtos,
+    valor: o.valor, status: 'novo',
+    observacoes: 'Gerado a partir do orçamento ' + o.numero,
+    criado_por: usuarioAtual ? usuarioAtual.id : null
+  });
+  if (error) { showToast('Erro ao gerar pedido: ' + error.message); return; }
+  await sb.from('orcamentos').update({ status: 'aprovado', atualizado_em: new Date().toISOString() }).eq('id', orcamentoEditandoId);
+  closeModal('modal-orc');
+  orcamentoEditandoId = null;
+  await carregarOrcamentos();
+  if (typeof carregarPedidos === 'function') await carregarPedidos();
+  showToast('Pedido ' + numero + ' gerado a partir deste orçamento!');
+}
+
+function atualizarDashboardOrcamentos(){
+  const abertos = orcamentos.filter(o => ['aguardando','negociando','follow'].includes(o.status));
+  const kpi = document.getElementById('kpi-orc-abertos');
+  if (kpi) kpi.textContent = abertos.length;
+  const aguardam = document.getElementById('kpi-orc-aguardam');
+  if (aguardam) aguardam.textContent = orcamentos.filter(o=>o.status==='aguardando').length + ' aguardam resposta';
+}
+
+// ===== COMISSÕES (real, Supabase) =====
+let comissoes = [];
+let comissaoEditandoId = null;
+const COMISSAO_STATUS_LABEL = {a_pagar:'A pagar', pago:'Pago'};
+const COMISSAO_STATUS_CLASS = {a_pagar:'pendente', pago:'ativo'};
+
+function mesChave(dataStr){ return (dataStr || '').slice(0,7); }
+function nomeMes(chave){
+  if (!chave) return '—';
+  const [ano, mes] = chave.split('-');
+  const d = new Date(Number(ano), Number(mes)-1, 1);
+  return d.toLocaleDateString('pt-BR', { month:'long' }) + '/' + ano.slice(2);
+}
+
+async function carregarComissoes(){
+  const { data, error } = await sb.from('comissoes').select('*').order('mes_referencia', { ascending: false });
+  if (error) { showToast('Erro ao carregar comissões: ' + error.message); return; }
+  comissoes = data || [];
+  renderComissoes();
+}
+
+function renderComissoes(){
+  const tbody = document.getElementById('com-tbody');
+  if (!tbody) return;
+  const hoje = new Date();
+  const chaveAtual = hoje.getFullYear() + '-' + String(hoje.getMonth()+1).padStart(2,'0');
+  const chavesComDados = [...new Set(comissoes.map(c => mesChave(c.mes_referencia)).filter(Boolean))].sort();
+  const mesFoco = chavesComDados.includes(chaveAtual) ? chaveAtual : (chavesComDados.length ? chavesComDados[chavesComDados.length-1] : chaveAtual);
+
+  document.getElementById('com-tabela-titulo').textContent = 'Por pessoa — ' + nomeMes(mesFoco);
+  document.getElementById('com-sub').textContent = 'Controle de pagamentos por período';
+
+  const doMes = comissoes.filter(c => mesChave(c.mes_referencia) === mesFoco);
+  const empty = document.getElementById('com-empty');
+  if (doMes.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = doMes.map(c => `
+      <tr>
+        <td>${c.pessoa}</td>
+        <td>${c.vendas_qtd != null ? c.vendas_qtd : '—'}</td>
+        <td>${c.volume ? 'R$ ' + Number(c.volume).toLocaleString('pt-BR') : '—'}</td>
+        <td>${c.percentual != null ? c.percentual + '%' : 'Fixo'}</td>
+        <td><span style="color:var(--accent2);font-weight:600">R$ ${Number(c.valor||0).toLocaleString('pt-BR')}</span></td>
+        <td><span class="status ${COMISSAO_STATUS_CLASS[c.status]}"><span class="dot"></span>${COMISSAO_STATUS_LABEL[c.status]}</span></td>
+        <td style="white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="abrirFichaComissao('${c.id}')">Editar</button></td>
+      </tr>`).join('');
+  }
+
+  const apagar = doMes.filter(c => c.status === 'a_pagar').reduce((s,c) => s + Number(c.valor||0), 0);
+  const apagarCount = doMes.filter(c => c.status === 'a_pagar').length;
+  const pago = doMes.filter(c => c.status === 'pago').reduce((s,c) => s + Number(c.valor||0), 0);
+  const pagoCount = doMes.filter(c => c.status === 'pago').length;
+  document.getElementById('kpi-com-apagar').textContent = 'R$' + apagar.toLocaleString('pt-BR');
+  document.getElementById('kpi-com-apagar-count').textContent = apagarCount + ' pendente' + (apagarCount===1?'':'s');
+  document.getElementById('kpi-com-pago').textContent = 'R$' + pago.toLocaleString('pt-BR');
+  document.getElementById('kpi-com-pago-count').textContent = pagoCount + ' pessoa' + (pagoCount===1?'':'s');
+
+  const anoAtual = hoje.getFullYear();
+  const acumulado = comissoes.filter(c => Number((c.mes_referencia||'').slice(0,4)) === anoAtual).reduce((s,c) => s + Number(c.valor||0), 0);
+  document.getElementById('kpi-com-ano-label').textContent = anoAtual;
+  document.getElementById('kpi-com-ano').textContent = 'R$' + acumulado.toLocaleString('pt-BR');
+
+  // histórico dos últimos 6 meses (a partir do mês foco)
+  const [anoF, mesF] = mesFoco.split('-').map(Number);
+  const meses6 = [];
+  for (let i=5; i>=0; i--){
+    const d = new Date(anoF, mesF-1-i, 1);
+    meses6.push(d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0'));
+  }
+  const totaisMes = meses6.map(chave => comissoes.filter(c => mesChave(c.mes_referencia) === chave).reduce((s,c) => s + Number(c.valor||0), 0));
+  const maxTotal = Math.max(1, ...totaisMes);
+  document.getElementById('com-chart-labels').innerHTML = meses6.map(c => `<span>${nomeMes(c).split('/')[0].slice(0,3)}</span>`).join('');
+  document.getElementById('com-chart-bars').innerHTML = totaisMes.map((v,i) => `<div class="cbar${i===totaisMes.length-1 && v>0 ? ' highlight':''}" style="height:${Math.max(4, Math.round(v/maxTotal*100))}%"></div>`).join('');
+  const melhorIdx = totaisMes.indexOf(Math.max(...totaisMes));
+  const media = totaisMes.reduce((a,b)=>a+b,0) / (totaisMes.filter(v=>v>0).length || 1);
+  document.getElementById('com-chart-resumo').innerHTML = `<span>Melhor mês: <strong style="color:var(--text)">${totaisMes[melhorIdx]>0 ? nomeMes(meses6[melhorIdx]).split('/')[0] : '—'}</strong></span><span>Média: <strong style="color:var(--text)">R$ ${Math.round(media).toLocaleString('pt-BR')}</strong></span>`;
+}
+
+function abrirNovaComissao(){
+  comissaoEditandoId = null;
+  document.getElementById('modal-comissao-titulo').textContent = 'Nova Comissão';
+  document.getElementById('cm-btn-salvar').textContent = 'Salvar comissão';
+  document.getElementById('cm-btn-excluir').style.display = 'none';
+  ['cm-pessoa','cm-vendas','cm-volume','cm-percentual','cm-valor'].forEach(id => document.getElementById(id).value = '');
+  const hoje = new Date();
+  document.getElementById('cm-mes').value = hoje.getFullYear() + '-' + String(hoje.getMonth()+1).padStart(2,'0');
+  document.getElementById('cm-status').value = 'a_pagar';
+  openModal('modal-comissao');
+}
+
+function abrirFichaComissao(id){
+  const c = comissoes.find(x => x.id === id);
+  if (!c) return;
+  comissaoEditandoId = id;
+  document.getElementById('modal-comissao-titulo').textContent = 'Editar Comissão';
+  document.getElementById('cm-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('cm-btn-excluir').style.display = '';
+  document.getElementById('cm-pessoa').value = c.pessoa || '';
+  document.getElementById('cm-mes').value = mesChave(c.mes_referencia);
+  document.getElementById('cm-vendas').value = c.vendas_qtd != null ? c.vendas_qtd : '';
+  document.getElementById('cm-volume').value = c.volume != null ? String(c.volume).replace('.', ',') : '';
+  document.getElementById('cm-percentual').value = c.percentual != null ? c.percentual : '';
+  document.getElementById('cm-valor').value = c.valor != null ? String(c.valor).replace('.', ',') : '';
+  document.getElementById('cm-status').value = c.status || 'a_pagar';
+  openModal('modal-comissao');
+}
+
+async function salvarComissao(){
+  const pessoa = document.getElementById('cm-pessoa').value.trim();
+  const mes = document.getElementById('cm-mes').value;
+  const valorTexto = document.getElementById('cm-valor').value.replace(/\./g,'').replace(',','.');
+  if (!pessoa || !mes || !valorTexto) { showToast('Preencha pessoa, mês e valor!'); return; }
+  const volumeTexto = document.getElementById('cm-volume').value.replace(/\./g,'').replace(',','.');
+  const payload = {
+    pessoa,
+    mes_referencia: mes + '-01',
+    vendas_qtd: document.getElementById('cm-vendas').value ? parseInt(document.getElementById('cm-vendas').value) : null,
+    volume: volumeTexto ? parseFloat(volumeTexto) : null,
+    percentual: document.getElementById('cm-percentual').value ? parseFloat(document.getElementById('cm-percentual').value) : null,
+    valor: parseFloat(valorTexto),
+    status: document.getElementById('cm-status').value,
+    atualizado_em: new Date().toISOString()
+  };
+  let error;
+  if (comissaoEditandoId) {
+    ({ error } = await sb.from('comissoes').update(payload).eq('id', comissaoEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('comissoes').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+  closeModal('modal-comissao');
+  await carregarComissoes();
+  showToast(comissaoEditandoId ? 'Comissão atualizada!' : 'Comissão lançada!');
+  comissaoEditandoId = null;
+}
+
+async function excluirComissaoAtual(){
+  if (!comissaoEditandoId) return;
+  if (!confirm('Excluir este lançamento de comissão?')) return;
+  const { error } = await sb.from('comissoes').delete().eq('id', comissaoEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-comissao');
+  comissaoEditandoId = null;
+  await carregarComissoes();
+  showToast('Comissão removida.');
+}
+
+function exportarComissoesCSV(){
+  if (comissoes.length === 0) { showToast('Nenhuma comissão para exportar.'); return; }
+  const linhas = [['Pessoa','Mês','Vendas','Volume','% Comissão','Valor','Status']];
+  comissoes.forEach(c => linhas.push([
+    c.pessoa, nomeMes(mesChave(c.mes_referencia)), c.vendas_qtd || '', c.volume || '', c.percentual != null ? c.percentual+'%' : 'Fixo', c.valor || '', COMISSAO_STATUS_LABEL[c.status] || c.status
+  ]));
+  const csv = linhas.map(l => l.map(v => `"${String(v).replace(/"/g,'""')}"`).join(';')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'comissoes.csv';
+  a.click();
+  showToast('Planilha exportada.');
+}
+
+// ===== METAS (real, Supabase) =====
+let metas = [];
+let metaEditandoId = null;
+
+async function carregarMetas(){
+  const { data, error } = await sb.from('metas').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar metas: ' + error.message); return; }
+  metas = data || [];
+  renderMetas();
+}
+
+function renderMetas(){
+  const destaqueEl = document.getElementById('mt-destaque');
+  const listaArea = document.getElementById('mt-lista-area');
+  const listaParceiro = document.getElementById('mt-lista-parceiro');
+  const empty = document.getElementById('mt-empty');
+  if (!destaqueEl) return;
+  document.getElementById('mt-ano-titulo').textContent = new Date().getFullYear();
+
+  if (metas.length === 0) {
+    empty.style.display = '';
+    destaqueEl.innerHTML = ''; listaArea.innerHTML = ''; listaParceiro.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const destaque = metas.find(m => m.categoria === 'geral');
+  if (destaque) {
+    const pct = destaque.valor_alvo ? Math.min(100, Math.round((destaque.valor_realizado||0)/destaque.valor_alvo*100)) : 0;
+    const faltam = Math.max(0, (destaque.valor_alvo||0) - (destaque.valor_realizado||0));
+    destaqueEl.innerHTML = `<div class="card" style="cursor:pointer;margin-bottom:16px;" onclick="abrirFichaMeta('${destaque.id}')">
+      <div class="card-header"><span class="card-title">${destaque.descricao} — Meta R$ ${Number(destaque.valor_alvo||0).toLocaleString('pt-BR')}</span></div>
+      <div class="card-body">
+        <div class="prog-label"><span>Realizado: <strong style="color:var(--text)">R$ ${Number(destaque.valor_realizado||0).toLocaleString('pt-BR')}</strong></span><span>${pct}%</span></div>
+        <div class="prog-track" style="height:10px"><div class="prog-fill fill-green" style="width:${pct}%"></div></div>
+        <div style="margin-top:12px;font-size:12px;color:var(--text3)">Faltam: <strong style="color:var(--text)">R$ ${faltam.toLocaleString('pt-BR')}</strong></div>
+      </div></div>`;
+  } else destaqueEl.innerHTML = '';
+
+  const listaHtml = (cat) => {
+    const itens = metas.filter(m => m.categoria === cat);
+    if (itens.length === 0) return '<div style="font-size:12px;color:var(--text3);padding:8px 0;">Nenhuma meta nesta categoria.</div>';
+    return itens.map(m => {
+      const pct = m.valor_alvo ? Math.min(100, Math.round((m.valor_realizado||0)/m.valor_alvo*100)) : 0;
+      const cor = pct>=70 ? 'fill-green' : (pct>=40 ? 'fill-blue' : 'fill-warn');
+      return `<div class="prog-item" style="cursor:pointer" onclick="abrirFichaMeta('${m.id}')"><div class="prog-label"><span>${m.descricao}${m.valor_alvo ? ' — R$'+Math.round(m.valor_alvo/1000)+'k' : ''}</span><span>${pct}%</span></div><div class="prog-track"><div class="prog-fill ${cor}" style="width:${pct}%"></div></div></div>`;
+    }).join('');
+  };
+  listaArea.innerHTML = listaHtml('area');
+  listaParceiro.innerHTML = listaHtml('parceiro');
+}
+
+function abrirNovaMeta(){
+  metaEditandoId = null;
+  document.getElementById('modal-meta-titulo').textContent = 'Nova Meta';
+  document.getElementById('mt-btn-salvar').textContent = 'Salvar meta';
+  document.getElementById('mt-btn-excluir').style.display = 'none';
+  ['mt-descricao','mt-valor-alvo','mt-valor-realizado','mt-inicio','mt-prazo'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('mt-categoria').value = 'geral';
+  document.getElementById('mt-responsavel').selectedIndex = 0;
+  openModal('modal-meta');
+}
+
+function abrirFichaMeta(id){
+  const m = metas.find(x => x.id === id);
+  if (!m) return;
+  metaEditandoId = id;
+  document.getElementById('modal-meta-titulo').textContent = 'Editar Meta';
+  document.getElementById('mt-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('mt-btn-excluir').style.display = '';
+  document.getElementById('mt-descricao').value = m.descricao || '';
+  document.getElementById('mt-categoria').value = m.categoria || 'geral';
+  document.getElementById('mt-responsavel').value = m.responsavel || 'Edgar';
+  document.getElementById('mt-valor-alvo').value = m.valor_alvo != null ? String(m.valor_alvo).replace('.', ',') : '';
+  document.getElementById('mt-valor-realizado').value = m.valor_realizado != null ? String(m.valor_realizado).replace('.', ',') : '';
+  document.getElementById('mt-inicio').value = m.inicio || '';
+  document.getElementById('mt-prazo').value = m.prazo || '';
+  openModal('modal-meta');
+}
+
+async function salvarMeta(){
+  const descricao = document.getElementById('mt-descricao').value.trim();
+  if (!descricao) { showToast('Preencha a descrição da meta!'); return; }
+  const alvoTexto = document.getElementById('mt-valor-alvo').value.replace(/\./g,'').replace(',','.');
+  const realizadoTexto = document.getElementById('mt-valor-realizado').value.replace(/\./g,'').replace(',','.');
+  const payload = {
+    descricao,
+    categoria: document.getElementById('mt-categoria').value,
+    responsavel: document.getElementById('mt-responsavel').value,
+    valor_alvo: alvoTexto ? parseFloat(alvoTexto) : null,
+    valor_realizado: realizadoTexto ? parseFloat(realizadoTexto) : 0,
+    inicio: document.getElementById('mt-inicio').value || null,
+    prazo: document.getElementById('mt-prazo').value || null,
+    atualizado_em: new Date().toISOString()
+  };
+  let error;
+  if (metaEditandoId) {
+    ({ error } = await sb.from('metas').update(payload).eq('id', metaEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('metas').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+  closeModal('modal-meta');
+  await carregarMetas();
+  showToast(metaEditandoId ? 'Meta atualizada!' : 'Meta criada!');
+  metaEditandoId = null;
+}
+
+async function excluirMetaAtual(){
+  if (!metaEditandoId) return;
+  if (!confirm('Excluir esta meta?')) return;
+  const { error } = await sb.from('metas').delete().eq('id', metaEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-meta');
+  metaEditandoId = null;
+  await carregarMetas();
+  showToast('Meta removida.');
+}
+
+// ===== ROTAS / VISITAS — Edgar (real, Supabase) =====
+let visitas = [];
+let visitaEditandoId = null;
+const VISITA_STATUS_LABEL = {agendado:'Agendado', realizado:'Realizado', prioridade:'Prioridade', cancelado:'Cancelado'};
+const VISITA_STATUS_CLASS = {agendado:'pendente', realizado:'ativo', prioridade:'novo', cancelado:'inativo'};
+
+function inicioSemana(d){ const dt = new Date(d); const dia = dt.getDay(); const diff = (dia===0?-6:1-dia); dt.setDate(dt.getDate()+diff); dt.setHours(0,0,0,0); return dt; }
+function fimSemana(d){ const ini = inicioSemana(d); const fim = new Date(ini); fim.setDate(fim.getDate()+6); fim.setHours(23,59,59,999); return fim; }
+
+async function carregarVisitas(){
+  const { data, error } = await sb.from('visitas').select('*').order('data', { ascending: true });
+  if (error) { showToast('Erro ao carregar visitas: ' + error.message); return; }
+  visitas = data || [];
+  renderVisitas();
+}
+
+function renderVisitas(){
+  const tbody = document.getElementById('vi-tbody');
+  const empty = document.getElementById('vi-empty');
+  if (!tbody) return;
+  if (visitas.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = visitas.map(v => `
+      <tr>
+        <td>${v.data ? new Date(v.data+'T00:00:00').toLocaleDateString('pt-BR', {day:'2-digit',month:'2-digit',weekday:'short'}) : '—'}</td>
+        <td>${v.cliente_nome}</td>
+        <td>${v.cidade || '—'}</td>
+        <td>${v.objetivo || '—'}</td>
+        <td><span style="color:var(--text3)">${v.parceiro || '—'}</span></td>
+        <td><span class="status ${VISITA_STATUS_CLASS[v.status] || 'pendente'}"><span class="dot"></span>${VISITA_STATUS_LABEL[v.status] || v.status}</span></td>
+        <td style="white-space:nowrap;"><button class="btn btn-outline btn-sm" onclick="abrirFichaVisita('${v.id}')">Editar</button></td>
+      </tr>`).join('');
+  }
+
+  const hoje = new Date();
+  const ini = inicioSemana(hoje), fim = fimSemana(hoje);
+  const estaSemana = visitas.filter(v => { if (!v.data) return false; const d = new Date(v.data+'T00:00:00'); return d >= ini && d <= fim; });
+  const realizadas = estaSemana.filter(v => v.status === 'realizado').length;
+  document.getElementById('kpi-vi-semana').textContent = estaSemana.length;
+  document.getElementById('kpi-vi-realizadas').textContent = realizadas + ' realizada' + (realizadas===1?'':'s');
+  document.getElementById('kpi-vi-conversao').textContent = (estaSemana.length ? Math.round(realizadas/estaSemana.length*100) : 0) + '%';
+  document.getElementById('kpi-vi-km').textContent = visitas.reduce((s,v) => s + (Number(v.km)||0), 0).toLocaleString('pt-BR');
+  const cidades = new Set(visitas.map(v => v.cidade).filter(Boolean));
+  document.getElementById('kpi-vi-cidades').textContent = cidades.size + ' cidade' + (cidades.size===1?'':'s') + ' visitadas';
+}
+
+function abrirNovaVisita(){
+  visitaEditandoId = null;
+  document.getElementById('modal-visita-titulo').textContent = 'Agendar Visita — Edgar';
+  document.getElementById('vi-btn-salvar').textContent = 'Agendar';
+  document.getElementById('vi-btn-excluir').style.display = 'none';
+  ['vi-cliente','vi-data','vi-cidade','vi-objetivo','vi-km'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('vi-parceiro').selectedIndex = 0;
+  document.getElementById('vi-status').value = 'agendado';
+  openModal('modal-visita');
+}
+
+function abrirFichaVisita(id){
+  const v = visitas.find(x => x.id === id);
+  if (!v) return;
+  visitaEditandoId = id;
+  document.getElementById('modal-visita-titulo').textContent = 'Editar Visita — Edgar';
+  document.getElementById('vi-btn-salvar').textContent = 'Salvar alterações';
+  document.getElementById('vi-btn-excluir').style.display = '';
+  document.getElementById('vi-cliente').value = v.cliente_nome || '';
+  document.getElementById('vi-data').value = v.data || '';
+  document.getElementById('vi-cidade').value = v.cidade || '';
+  document.getElementById('vi-objetivo').value = v.objetivo || '';
+  document.getElementById('vi-km').value = v.km != null ? v.km : '';
+  document.getElementById('vi-parceiro').value = v.parceiro || 'N&E Inox';
+  document.getElementById('vi-status').value = v.status || 'agendado';
+  openModal('modal-visita');
+}
+
+async function salvarVisita(){
+  const cliente = document.getElementById('vi-cliente').value.trim();
+  const data = document.getElementById('vi-data').value;
+  if (!cliente || !data) { showToast('Preencha cliente e data!'); return; }
+  const payload = {
+    cliente_nome: cliente,
+    data,
+    cidade: document.getElementById('vi-cidade').value.trim(),
+    objetivo: document.getElementById('vi-objetivo').value.trim(),
+    parceiro: document.getElementById('vi-parceiro').value,
+    km: document.getElementById('vi-km').value ? parseFloat(document.getElementById('vi-km').value) : null,
+    status: document.getElementById('vi-status').value,
+    atualizado_em: new Date().toISOString()
+  };
+  let error;
+  if (visitaEditandoId) {
+    ({ error } = await sb.from('visitas').update(payload).eq('id', visitaEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('visitas').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+  closeModal('modal-visita');
+  await carregarVisitas();
+  showToast(visitaEditandoId ? 'Visita atualizada!' : 'Visita agendada!');
+  visitaEditandoId = null;
+}
+
+async function excluirVisitaAtual(){
+  if (!visitaEditandoId) return;
+  if (!confirm('Excluir esta visita?')) return;
+  const { error } = await sb.from('visitas').delete().eq('id', visitaEditandoId);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  closeModal('modal-visita');
+  visitaEditandoId = null;
+  await carregarVisitas();
+  showToast('Visita removida.');
+}
+
+// ===== RELATÓRIOS (calculado a partir de pedidos reais) =====
+function renderRelatorios(){
+  const tbody = document.getElementById('rel-parceiro-tbody');
+  const empty = document.getElementById('rel-parceiro-empty');
+  if (!tbody) return;
+
+  const porParceiro = {};
+  pedidos.forEach(p => {
+    const chave = p.produto ? (produtos.find(pr => p.produto && p.produto.includes(pr.nome))?.parceiro || 'Outros') : 'Outros';
+    if (!porParceiro[chave]) porParceiro[chave] = { vendas:0, volume:0 };
+    porParceiro[chave].vendas += 1;
+    porParceiro[chave].volume += Number(p.valor || 0);
+  });
+  const totalVolume = Object.values(porParceiro).reduce((s,x)=>s+x.volume,0);
+  const linhas = Object.entries(porParceiro).sort((a,b) => b[1].volume - a[1].volume);
+
+  if (linhas.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; }
+  else {
+    empty.style.display = 'none';
+    tbody.innerHTML = linhas.map(([nome, v]) => `
+      <tr><td>${nome}</td><td>${v.vendas}</td><td>R$ ${v.volume.toLocaleString('pt-BR')}</td><td style="color:var(--accent)">${totalVolume ? Math.round(v.volume/totalVolume*100) : 0}%</td></tr>`).join('');
+  }
+
+  const hoje = new Date();
+  const meses6 = [];
+  for (let i=5; i>=0; i--){
+    const d = new Date(hoje.getFullYear(), hoje.getMonth()-i, 1);
+    meses6.push({ chave: d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'), label: d.toLocaleDateString('pt-BR',{month:'short'}) });
+  }
+  const totaisMes = meses6.map(m => pedidos.filter(p => p.criado_em && p.criado_em.slice(0,7) === m.chave).reduce((s,p) => s + Number(p.valor||0), 0));
+  const maxTotal = Math.max(1, ...totaisMes);
+  const labelsEl = document.getElementById('rel-fat-labels');
+  const barsEl = document.getElementById('rel-fat-bars');
+  const valoresEl = document.getElementById('rel-fat-valores');
+  if (labelsEl) labelsEl.innerHTML = meses6.map(m => `<span>${m.label}</span>`).join('');
+  if (barsEl) barsEl.innerHTML = totaisMes.map((v,i) => `<div class="cbar${i===totaisMes.length-1 && v>0 ? ' highlight':''}" style="height:${Math.max(4, Math.round(v/maxTotal*100))}%;background:${i===totaisMes.length-1?'var(--accent2)':'var(--accent)'}"></div>`).join('');
+  if (valoresEl) valoresEl.innerHTML = totaisMes.map((v,i) => `<span${i===totaisMes.length-1?' style="color:var(--accent2);font-weight:600"':''}>R$${Math.round(v/1000)}k</span>`).join('');
+}
+
+function filterCat(cat, el){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  const rows = document.querySelectorAll('#cat-tbody tr');
+  rows.forEach(r=>{
+    r.style.display = (cat==='todos' || r.dataset.cat===cat) ? '' : 'none';
+  });
+}
+
+// ===== PRODUTOS / CATÁLOGO (real, Supabase) =====
+let produtos = [];
+let produtoEditandoId = null;
+const CATEGORIA_LABEL = {cozinhas:'Cozinhas', decoracao:'Decoração', industrial:'Industrial', atacado:'Atacado'};
+const PRODUTO_STATUS_LABEL = {disponivel:'Disponível', sob_encomenda:'Sob encomenda', indisponivel:'Indisponível'};
+const PRODUTO_STATUS_CLASS = {disponivel:'ativo', sob_encomenda:'pendente', indisponivel:'inativo'};
+
+async function carregarProdutos(){
+  const { data, error } = await sb.from('produtos').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar produtos: ' + error.message); return; }
+  produtos = data || [];
+  renderProdutos();
+}
+
+function renderProdutos(){
+  const tbody = document.getElementById('cat-tbody');
+  const empty = document.getElementById('cat-empty');
+  if (!tbody) return;
+  if (produtos.length === 0) { tbody.innerHTML = ''; empty.style.display = ''; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = produtos.map(p => `
+    <tr data-cat="${p.categoria || ''}">
+      <td>${p.nome}</td>
+      <td><span style="color:var(--text3)">${p.parceiro || ''}</span></td>
+      <td><span class="tag">${CATEGORIA_LABEL[p.categoria] || ''}</span></td>
+      <td>${p.preco ? 'R$ ' + Number(p.preco).toLocaleString('pt-BR') : '—'}</td>
+      <td><span class="status ${PRODUTO_STATUS_CLASS[p.status]}"><span class="dot"></span>${PRODUTO_STATUS_LABEL[p.status]}</span></td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-outline btn-sm" onclick="abrirOrcamentoComProduto('${p.id}')">+ Orç.</button>
+        <button class="btn btn-outline btn-sm" onclick="editarProduto('${p.id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="excluirProduto('${p.id}')">Excluir</button>
+      </td>
+    </tr>`).join('');
+}
+
+function abrirNovoProduto(){
+  produtoEditandoId = null;
+  document.getElementById('modal-produto-titulo').textContent = 'Adicionar Produto ao Catálogo';
+  ['pr2-nome','pr2-preco','pr2-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pr2-parceiro').selectedIndex = 0;
+  document.getElementById('pr2-categoria').selectedIndex = 0;
+  document.getElementById('pr2-status').value = 'disponivel';
+  openModal('modal-produto');
+}
+
+function editarProduto(id){
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  produtoEditandoId = id;
+  document.getElementById('modal-produto-titulo').textContent = 'Editar Produto';
+  document.getElementById('pr2-nome').value = p.nome || '';
+  document.getElementById('pr2-parceiro').value = p.parceiro || 'N&E Inox';
+  document.getElementById('pr2-categoria').value = p.categoria || 'cozinhas';
+  document.getElementById('pr2-preco').value = p.preco || '';
+  document.getElementById('pr2-status').value = p.status || 'disponivel';
+  document.getElementById('pr2-desc').value = p.descricao || '';
+  openModal('modal-produto');
+}
+
+async function salvarProduto(){
+  const nome = document.getElementById('pr2-nome').value.trim();
+  if (!nome) { showToast('Preencha o nome do produto!'); return; }
+  const precoTexto = document.getElementById('pr2-preco').value.replace(/\./g,'').replace(',','.');
+  const payload = {
+    nome,
+    parceiro: document.getElementById('pr2-parceiro').value,
+    categoria: document.getElementById('pr2-categoria').value,
+    preco: precoTexto ? parseFloat(precoTexto) : null,
+    status: document.getElementById('pr2-status').value,
+    descricao: document.getElementById('pr2-desc').value.trim(),
+    atualizado_em: new Date().toISOString()
+  };
+
+  let error;
+  if (produtoEditandoId) {
+    ({ error } = await sb.from('produtos').update(payload).eq('id', produtoEditandoId));
+  } else {
+    payload.criado_por = usuarioAtual ? usuarioAtual.id : null;
+    ({ error } = await sb.from('produtos').insert(payload));
+  }
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  closeModal('modal-produto');
+  await carregarProdutos();
+  showToast(produtoEditandoId ? 'Produto atualizado!' : 'Produto adicionado ao catálogo!');
+  produtoEditandoId = null;
+}
+
+async function excluirProduto(id){
+  const p = produtos.find(x => x.id === id);
+  if (!confirm('Excluir o produto ' + (p ? p.nome : '') + '?')) return;
+  const { error } = await sb.from('produtos').delete().eq('id', id);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  await carregarProdutos();
+  showToast('Produto removido.');
+}
+
+function abrirOrcamentoComProduto(id){
+  const p = produtos.find(x => x.id === id);
+  if (!p) return;
+  orcamentoEditandoId = null;
+  document.getElementById('modal-orc-titulo').textContent = 'Novo Orçamento';
+  document.getElementById('or-btn-salvar').textContent = 'Criar orçamento';
+  document.getElementById('or-btn-excluir').style.display = 'none';
+  document.getElementById('or-btn-pedido').style.display = 'none';
+  ['or-cliente','or-obs','or-validade'].forEach(fid => document.getElementById(fid).value = '');
+  document.getElementById('or-produtos').value = p.nome + (p.parceiro ? ' (' + p.parceiro + ')' : '');
+  document.getElementById('or-valor').value = p.preco ? String(p.preco).replace('.', ',') : '';
+  if (p.parceiro) {
+    const sel = document.getElementById('or-parceiro');
+    for (const opt of sel.options) { if (opt.value === p.parceiro || opt.text === p.parceiro) { sel.value = opt.value; break; } }
+  }
+  openModal('modal-orc');
+}
+
+function setCrmFilter(f, el){
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  showToast('Filtrando: '+el.textContent);
+}
+
+function focusSearch(){ showToast('Busca global em breve!'); }
+
+// Tab click
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click', function(){
+    this.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// ===== APRESENTAÇÕES =====
+let apresentacoes = JSON.parse(localStorage.getItem('ms-apresentacoes') || '[]');
+
+function renderApresentacoes() {
+  const grid = document.getElementById('apres-grid');
+  const empty = document.getElementById('apres-empty');
+  grid.innerHTML = '';
+  if (apresentacoes.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  apresentacoes.forEach((ap, i) => {
+    const data = ap.data || '';
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="card-title">📄 ${ap.titulo}</span>
+        <button class="btn btn-danger btn-sm" onclick="excluirApresentacao(${i})">Excluir</button>
+      </div>
+      <div class="card-body">
+        ${ap.parceiro ? '<span class="tag" style="margin-bottom:10px;display:inline-block">' + ap.parceiro + '</span>' : ''}
+        <div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:12px">${ap.desc || 'Sem descrição.'}<br><br><span style="color:var(--text3)">Adicionado em: ${data}</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="${ap.link}" target="_blank" class="btn btn-primary btn-sm">🔗 Abrir PDF</a>
+          <button class="btn btn-outline btn-sm" onclick="copiarLink('${ap.link}')">📋 Copiar link</button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function salvarApresentacao() {
+  const titulo = document.getElementById('apres-titulo').value.trim();
+  const link = document.getElementById('apres-link').value.trim();
+  if (!titulo || !link) { showToast('Preencha o título e o link!'); return; }
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  apresentacoes.unshift({
+    titulo,
+    parceiro: document.getElementById('apres-parceiro').value,
+    link,
+    desc: document.getElementById('apres-desc').value.trim(),
+    data: hoje
+  });
+  localStorage.setItem('ms-apresentacoes', JSON.stringify(apresentacoes));
+  document.getElementById('apres-titulo').value = '';
+  document.getElementById('apres-link').value = '';
+  document.getElementById('apres-desc').value = '';
+  closeModal('modal-apresentacao');
+  renderApresentacoes();
+  showToast('Apresentação salva com sucesso!');
+}
+
+function excluirApresentacao(i) {
+  if (!confirm('Excluir esta apresentação?')) return;
+  apresentacoes.splice(i, 1);
+  localStorage.setItem('ms-apresentacoes', JSON.stringify(apresentacoes));
+  renderApresentacoes();
+  showToast('Apresentação removida.');
+}
+
+function copiarLink(link) {
+  navigator.clipboard.writeText(link).then(() => showToast('Link copiado!'));
+}
+
+// Atualizar ação do botão de apresentações
+btnActions['apresentacoes'] = () => openModal('modal-apresentacao');
+
+renderApresentacoes();
+
+// ===== USUÁRIOS & LOGIN =====
+const PERFIL_LABELS = { admin:'Admin', vendedor:'Vendedor', backoffice:'Back-office' };
+const PERFIL_CORES  = { admin:'var(--accent)', vendedor:'var(--accent2)', backoffice:'var(--warn)' };
+
+// Permissões por perfil
+const PERMISSOES = {
+  admin:      ['dashboard','painel-gestora','mapeamento','parceiros','catalogo','crm','orcamentos','pedidos','comissoes','metas','rotas','apresentacoes','relatorios','usuarios'],
+  vendedor:   ['dashboard','mapeamento','crm','orcamentos','pedidos','rotas','catalogo','apresentacoes'],
+  backoffice: ['dashboard','catalogo','comissoes','relatorios','apresentacoes','parceiros']
+};
+
+let usuariosDB = [];       // lista de perfis (tabela 'usuarios'), carregada do Supabase
+let usuarioAtual = null;   // perfil do usuário logado
+
+async function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const s = document.getElementById('login-pass').value;
+  document.getElementById('login-error').style.display = 'none';
+
+  const { data, error } = await sb.auth.signInWithPassword({
+    email: u + AUTH_DOMAIN,
+    password: s
+  });
+
+  if (error || !data.session) {
+    document.getElementById('login-error').textContent = 'Usuário ou senha inválidos.';
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+
+  await carregarPerfilLogado();
+}
+
+async function carregarPerfilLogado() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data: perfil, error } = await sb.from('usuarios').select('*').eq('id', user.id).single();
+  if (error || !perfil) {
+    document.getElementById('login-error').textContent = 'Erro: ' + (error ? (error.message + ' [' + error.code + ']') : 'perfil não encontrado') + ' | UID logado: ' + user.id;
+    document.getElementById('login-error').style.display = 'block';
+    await sb.auth.signOut();
+    return;
+  }
+
+  usuarioAtual = { nome: perfil.nome, user: perfil.user_login, perfil: perfil.perfil, email: perfil.email, id: perfil.id };
+
+  document.getElementById('login-screen').style.display = 'none';
+  aplicarPermissoes(usuarioAtual);
+  document.getElementById('topbar-perfil').textContent = usuarioAtual.nome + ' · ' + PERFIL_LABELS[usuarioAtual.perfil];
+  document.getElementById('topbar-avatar').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
+  document.getElementById('modal-user-nome').textContent = usuarioAtual.nome;
+  document.getElementById('modal-user-perfil').textContent = PERFIL_LABELS[usuarioAtual.perfil];
+  document.getElementById('modal-avatar-big').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
+  document.getElementById('nav-usuarios').style.display = usuarioAtual.perfil === 'admin' ? '' : 'none';
+  document.getElementById('nav-painel-gestora').style.display = usuarioAtual.perfil === 'admin' ? '' : 'none';
+
+  // Carregar dados reais do módulo de Oportunidades assim que logar
+  if (typeof carregarOportunidades === 'function') carregarOportunidades();
+  if (typeof carregarUsuarios === 'function') carregarUsuarios();
+  if (typeof carregarParceiros === 'function') carregarParceiros();
+  if (typeof carregarPedidos === 'function') carregarPedidos();
+  if (typeof carregarProdutos === 'function') carregarProdutos();
+  if (typeof carregarClientes === 'function') carregarClientes();
+  if (typeof carregarMapeamento === 'function') carregarMapeamento();
+  if (typeof carregarOrcamentos === 'function') carregarOrcamentos();
+  if (typeof carregarComissoes === 'function') carregarComissoes();
+  if (typeof carregarMetas === 'function') carregarMetas();
+  if (typeof carregarVisitas === 'function') carregarVisitas();
+}
+
+async function doLogout() {
+  await sb.auth.signOut();
+  usuarioAtual = null;
+  closeModal('modal-perfil-info');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// Ao carregar a página, verifica se já existe uma sessão válida (evita pedir login de novo)
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (data.session) await carregarPerfilLogado();
+})();
+
+function aplicarPermissoes(user) {
+  const permitidos = PERMISSOES[user.perfil] || [];
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    const onclick = btn.getAttribute('onclick') || '';
+    const match = onclick.match(/goTo\(\'(\w+)\'/);
+    if (match) {
+      btn.style.display = permitidos.includes(match[1]) ? '' : 'none';
+    }
+  });
+}
+
+// Cliente Supabase separado (storage próprio) para criar novos usuários
+// sem derrubar a sessão do admin que está logado.
+const sbAdmin = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: { storageKey: 'ms-admin-temp-auth', persistSession: false }
+});
+
+async function salvarUsuario() {
+  const nome  = document.getElementById('nu-nome').value.trim();
+  const user  = document.getElementById('nu-user').value.trim().toLowerCase();
+  const senha = document.getElementById('nu-senha').value;
+  const perfil= document.getElementById('nu-perfil').value;
+  const email = document.getElementById('nu-email').value.trim();
+  if (!nome || !user || senha.length < 6) { showToast('Preencha nome, usuário e senha (mín. 6 chars)'); return; }
+  if (usuariosDB.find(x => x.user_login === user)) { showToast('Usuário já existe!'); return; }
+
+  const resp = await fetch(SUPABASE_URL + '/functions/v1/create-user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'apikey': SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({ email: user + AUTH_DOMAIN, password: senha })
+  });
+  const result = await resp.json();
+  if (!resp.ok || result.error) { showToast('Erro ao criar login: ' + (result.error || resp.statusText)); return; }
+
+  const { error: perfilError } = await sb.from('usuarios').insert({
+    id: result.user.id, nome, user_login: user, perfil, email
+  });
+  if (perfilError) { showToast('Login criado, mas erro ao salvar perfil: ' + perfilError.message); return; }
+
+  ['nu-nome','nu-user','nu-senha','nu-email'].forEach(id => document.getElementById(id).value = '');
+  closeModal('modal-usuario');
+  await carregarUsuarios();
+  showToast('Usuário criado com sucesso!');
+}
+
+async function excluirUsuario(i) {
+  const u = usuariosDB[i];
+  if (u.user_login === (usuarioAtual && usuarioAtual.user)) { showToast('Não é possível excluir o usuário logado.'); return; }
+  if (!confirm('Excluir o usuário ' + u.nome + '? (isso remove o perfil; o login precisa ser removido também em Authentication no Supabase)')) return;
+  const { error } = await sb.from('usuarios').delete().eq('id', u.id);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  await carregarUsuarios();
+  showToast('Usuário removido.');
+}
+
+async function carregarUsuarios() {
+  const { data, error } = await sb.from('usuarios').select('*').order('criado_em');
+  if (error) { showToast('Erro ao carregar usuários: ' + error.message); return; }
+  usuariosDB = data || [];
+  renderUsuarios();
+}
+
+function renderUsuarios() {
+  const tbody = document.getElementById('usuarios-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  usuariosDB.forEach((u, i) => {
+    const cor = PERFIL_CORES[u.perfil] || 'var(--text2)';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${u.nome}</td>
+      <td><span style="color:var(--text3)">${u.user_login}</span></td>
+      <td><span class="status" style="background:rgba(0,0,0,0.2);color:${cor}">${PERFIL_LABELS[u.perfil]}</span></td>
+      <td><span class="status ativo"><span class="dot"></span>Ativo</span></td>
+      <td>
+        ${u.user_login !== (usuarioAtual && usuarioAtual.user) ? '<button class="btn btn-danger btn-sm" onclick="excluirUsuario(' + i + ')">Excluir</button>' : '<span style="font-size:11px;color:var(--text3)">Você</span>'}
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Inicializar: se já tinha sessão, logar direto
+if (usuarioAtual) {
+  document.getElementById('login-screen').style.display = 'none';
+  aplicarPermissoes(usuarioAtual);
+  document.getElementById('topbar-perfil').textContent = usuarioAtual.nome + ' · ' + PERFIL_LABELS[usuarioAtual.perfil];
+  document.getElementById('topbar-avatar').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
+  document.getElementById('modal-user-nome').textContent = usuarioAtual.nome;
+  document.getElementById('modal-user-perfil').textContent = PERFIL_LABELS[usuarioAtual.perfil];
+  document.getElementById('modal-avatar-big').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
+  document.getElementById('nav-usuarios').style.display = usuarioAtual.perfil === 'admin' ? '' : 'none';
+  document.getElementById('nav-painel-gestora').style.display = usuarioAtual.perfil === 'admin' ? '' : 'none';
+}
+
+// Atualizar titles/btnLabels/btnActions para usuários
+titles['usuarios'] = 'Usuários';
+btnLabels['usuarios'] = '+ Novo Usuário';
+btnActions['usuarios'] = () => openModal('modal-usuario');
+
+// Render ao entrar na tela
+const origGoTo = goTo;
+
+// Interceptar goTo para renderizar usuários
+const _goToOrig = window.goTo;
+window.goTo = function(id, el) {
+  _goToOrig(id, el);
+  if (id === 'usuarios') renderUsuarios();
+};
+
+// ===== EXPORTAR COMISSÕES EXCEL =====
+btnActions['comissoes'] = exportarComissoes;
+
+function exportarComissoes() {
+  // Dados das comissões
+  const dados = [
+    ['Pessoa', 'Papel', 'Vendas', 'Volume (R$)', '% Comissão', 'Valor (R$)', 'Status', 'Período'],
+    ['Edgar',         'Vendedor de campo',  12, 62000, '5%',  3100, 'A pagar',  'Junho/2026'],
+    ['Nelma',         'Back-office',        '-', '-',  'Fixo', 1200, 'Pago',    'Junho/2026'],
+    ['Fort Atacadista','Parceiro — indicações', 6, 19000, '10%', 1900, 'A pagar', 'Junho/2026'],
+  ];
+
+  // Gerar CSV com separador ; (compatível com Excel Brasil)
+  const csv = dados.map(row =>
+    row.map(cell => '"' + String(cell).replace(/"/g,'""') + '"').join(';')
+  ).join('\n');
+
+  // Adicionar BOM para Excel reconhecer UTF-8
+  const bom = '\uFEFF';
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'comissoes-ms-junho-2026.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Planilha exportada! Abra no Excel.');
+}
+
+// ===== PROSPECÇÃO =====
+const CATALOGO_LINKS = {
+  portfolio:  'https://martinsbi82-ux.github.io/ms-one-crm/catalogos/portfolio-ms-geral.pdf',
+  neinox:     'https://drive.google.com/file/d/SEU-LINK-NEINOX',
+  fort:       'https://drive.google.com/file/d/SEU-LINK-FORT',
+  decorativo: 'https://drive.google.com/file/d/SEU-LINK-DECORATIVO',
+};
+
+const CATALOGO_NOMES = {
+  portfolio:  'Portfólio MS — Geral',
+  neinox:     'Catálogo N&E Inox',
+  fort:       'Catálogo Fort Atacadista',
+  decorativo: 'Catálogo Decorativo Casa',
+  custom:     'Material personalizado',
+};
+
+const STATUS_PROSP = {
+  aguardando: { label:'Aguardando contato', cor:'var(--warn)' },
+  enviado:    { label:'Material enviado',   cor:'var(--accent)' },
+  respondeu:  { label:'Responderam',        cor:'var(--accent2)' },
+  convertido: { label:'Convertido ✅',      cor:'#22c55e' },
+};
+
+let prospects = [];   // cache local da tabela 'oportunidades' do Supabase
+let prospFiltro = 'todos';
+let prospAtualIdx = null;
+
+// Mostrar/ocultar campo link custom
+document.getElementById('pr-catalogo').addEventListener('change', function() {
+  document.getElementById('pr-link-wrap').style.display = this.value === 'custom' ? 'block' : 'none';
+});
+
+async function carregarOportunidades() {
+  const { data, error } = await sb.from('oportunidades').select('*').order('criado_em', { ascending: false });
+  if (error) { showToast('Erro ao carregar oportunidades: ' + error.message); return; }
+  // Mapear colunas do banco para os nomes usados na tela (compatibilidade com o código existente)
+  prospects = (data || []).map(o => ({
+    id: o.id, nome: o.nome, wpp: o.whatsapp, cnpj: o.cnpj, resp: o.responsavel_texto,
+    seg: o.segmento, catalogo: o.catalogo, link: o.link, obs: o.observacoes,
+    status: o.status, data: new Date(o.criado_em).toLocaleDateString('pt-BR')
+  }));
+  renderProspects();
+}
+
+async function salvarProspect() {
+  const nome = document.getElementById('pr-nome').value.trim();
+  const wpp  = document.getElementById('pr-wpp').value.trim().replace(/\D/g,'');
+  if (!nome || !wpp) { showToast('Preencha nome e WhatsApp!'); return; }
+  const cat = document.getElementById('pr-catalogo').value;
+  const linkCustom = document.getElementById('pr-link-custom').value.trim();
+
+  const { error } = await sb.from('oportunidades').insert({
+    nome, whatsapp: wpp, cnpj: document.getElementById('pr-cnpj').value.trim(),
+    responsavel_texto: document.getElementById('pr-resp').value.trim(),
+    segmento: document.getElementById('pr-seg').value,
+    catalogo: cat,
+    link: cat === 'custom' ? linkCustom : (CATALOGO_LINKS[cat] || ''),
+    observacoes: document.getElementById('pr-obs').value.trim(),
+    status: 'aguardando',
+    responsavel_id: usuarioAtual ? usuarioAtual.id : null
+  });
+  if (error) { showToast('Erro ao salvar: ' + error.message); return; }
+
+  ['pr-nome','pr-cnpj','pr-resp','pr-wpp','pr-link-custom','pr-obs'].forEach(id => document.getElementById(id).value = '');
+  closeModal('modal-prospect');
+  await carregarOportunidades();
+  showToast('Prospect cadastrado!');
+}
+
+function renderProspects() {
+  const lista = document.getElementById('prosp-lista');
+  const empty = document.getElementById('prosp-empty');
+  const filtrados = prospFiltro === 'todos' ? prospects : prospects.filter(p => p.status === prospFiltro);
+
+  // KPIs
+  document.getElementById('kpi-total-prosp').textContent = prospects.length;
+  document.getElementById('kpi-aguard').textContent   = prospects.filter(p=>p.status==='aguardando').length;
+  document.getElementById('kpi-enviado').textContent  = prospects.filter(p=>p.status==='enviado').length;
+  document.getElementById('kpi-respondeu').textContent= prospects.filter(p=>p.status==='respondeu').length;
+  document.getElementById('badge-prosp').textContent  = prospects.length;
+
+  if (filtrados.length === 0) {
+    lista.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  lista.innerHTML = filtrados.map((p, i) => {
+    const idx = prospects.indexOf(p);
+    const st = STATUS_PROSP[p.status] || STATUS_PROSP.aguardando;
+    const catNome = CATALOGO_NOMES[p.catalogo] || '—';
+    return `
+    <div class="card" style="margin-bottom:10px;">
+      <div class="card-body" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:160px;">
+          <div style="font-size:13px;font-weight:600;color:var(--text)">${p.nome}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${p.resp ? p.resp + ' · ' : ''}${p.seg} · ${p.data}</div>
+          ${p.cnpj ? `<div style="font-size:11px;color:var(--text3);margin-top:2px;">CNPJ: ${p.cnpj}</div>` : ''}
+        </div>
+        <div style="min-width:140px;">
+          <div style="font-size:11px;color:var(--text3)">Material</div>
+          <div style="font-size:12px;color:var(--text2)">${catNome}</div>
+        </div>
+        <span class="status" style="background:rgba(0,0,0,0.15);color:${st.cor};white-space:nowrap">
+          <span class="dot" style="background:${st.cor}"></span>${st.label}
+        </span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" style="background:#25D366" onclick="prepararMensagem(${idx})">📲 WhatsApp</button>
+          <select class="form-select" style="padding:4px 8px;font-size:11.5px;width:auto;" onchange="mudarStatus(${idx},this.value)">
+            <option value="">Mover para...</option>
+            <option value="aguardando">⏳ Aguardando</option>
+            <option value="enviado">📤 Enviado</option>
+            <option value="respondeu">💬 Responderam</option>
+            <option value="convertido">✅ Convertido</option>
+          </select>
+          <button class="btn btn-danger btn-sm" onclick="excluirProspect(${idx})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function prepararMensagem(idx) {
+  prospAtualIdx = idx;
+  const p = prospects[idx];
+  const catNome = CATALOGO_NOMES[p.catalogo] || 'nosso material';
+  const link = p.link || '[COLE O LINK AQUI]';
+  const resp = p.resp ? p.resp.split(' ')[0] : p.nome.split(' ')[0];
+
+  const msg = `Olá, ${resp}! Tudo bem? 😊
+
+Sou da *MS Representações* e entramos em contato porque trabalhamos com soluções para o segmento de *${p.seg}*.
+
+Gostaria de apresentar o *${catNome}* com produtos e condições especiais para o seu negócio.
+
+Segue o link para acesso: ${link}
+
+Qualquer dúvida, estou à disposição! 🤝
+
+*MS Representações*`;
+
+  document.getElementById('msg-wpp-texto').value = msg;
+  openModal('modal-msg-wpp');
+}
+
+async function abrirWhatsApp() {
+  const p = prospects[prospAtualIdx];
+  const msg = document.getElementById('msg-wpp-texto').value;
+  const url = 'https://wa.me/' + p.wpp + '?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+  // Atualizar status para enviado automaticamente + registrar no histórico
+  if (p.status === 'aguardando') {
+    await sb.from('oportunidades').update({ status: 'enviado', atualizado_em: new Date().toISOString() }).eq('id', p.id);
+  }
+  await sb.from('historico_contatos').insert({
+    oportunidade_id: p.id, tipo: 'whatsapp', descricao: 'Mensagem enviada via WhatsApp',
+    usuario_id: usuarioAtual ? usuarioAtual.id : null
+  });
+  closeModal('modal-msg-wpp');
+  await carregarOportunidades();
+  showToast('WhatsApp aberto! Status atualizado para Enviado.');
+}
+
+async function mudarStatus(idx, status) {
+  if (!status) return;
+  const p = prospects[idx];
+  const { error } = await sb.from('oportunidades').update({ status, atualizado_em: new Date().toISOString() }).eq('id', p.id);
+  if (error) { showToast('Erro ao atualizar: ' + error.message); return; }
+  await carregarOportunidades();
+  showToast('Status atualizado!');
+}
+
+async function excluirProspect(idx) {
+  const p = prospects[idx];
+  if (!confirm('Excluir ' + p.nome + '?')) return;
+  const { error } = await sb.from('oportunidades').delete().eq('id', p.id);
+  if (error) { showToast('Erro ao excluir: ' + error.message); return; }
+  await carregarOportunidades();
+  showToast('Prospect removido.');
+}
+
+function filtrarProsp(f, el) {
+  prospFiltro = f;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderProspects();
+}
+
+// Adicionar ao sistema
+titles['prospeccao']    = 'Prospecção de Clientes';
+btnLabels['prospeccao'] = '+ Novo Prospect';
+btnActions['prospeccao']= () => openModal('modal-prospect');
+PERMISSOES.admin.push('prospeccao');
+PERMISSOES.vendedor.push('prospeccao');
+
+// Render ao entrar na tela
+const _goToOrig2 = window.goTo;
+window.goTo = function(id, el) {
+  _goToOrig2(id, el);
+  if (id === 'prospeccao') renderProspects();
+};
+
+renderProspects();
+</script>
+</body>
+</html>
